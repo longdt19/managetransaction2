@@ -71,11 +71,13 @@ export default {
         payload[item.key] = item.value
       })
 
-      console.log('method', this.methodRequest)
-      // const response = await this.$services.do_request(this.methodRequest, this.apiUrl, payload)
-      // this.loading = false
-
-      // console.log('response', response)
+      const response = await this.$services.do_request(this.methodRequest, this.apiUrl, payload)
+      if (response.status === 200) {
+        this.loading = false
+        this.$message.success('Success')
+        this.$emit('done_request')
+        this.dialogFormVisible = false
+      }
     }
   }
 }

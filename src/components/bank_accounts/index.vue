@@ -12,13 +12,14 @@
           :api-url="apiUrl"
           :items-create="bank_items"
           method-request="post"
+          @done_request="done_request"
         />
     </div></el-col>
 
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component />
+    <table-component :data-table="data_table" :loading="loading"/>
   </div>
 
 </section>
@@ -40,8 +41,41 @@ export default {
         {label: 'Chi nhánh', value: '', key: 'branch', type: 'text'},
         {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'}
       ],
-      apiUrl: BANK_ACCOUNTS_URL
+      apiUrl: BANK_ACCOUNTS_URL,
+      loading: false,
+      data_table: [],
+      pagination: {
+        page: 0,
+        size: 10
+      },
+      sorted_by: 'createdAt,desc'
     }
+  },
+  methods: {
+    async load_list () {
+      if (this.loading) return
+      this.loading = true
+
+      const params = {
+        'page': this.pagination.page,
+        'size': this.pagination.size,
+        'sort': this.sorted_by
+      }
+
+      const response = await this.$services.do_request('get', BANK_ACCOUNTS_URL, params)
+
+      if (response.status === 200) {
+        this.loading = false
+
+        this.data_table = response.data.content
+      }
+    },
+    done_request () {
+      this.load_list()
+    }
+  },
+  created () {
+    this.load_list()
   }
 }
 </script>

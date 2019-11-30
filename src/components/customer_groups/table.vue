@@ -1,37 +1,36 @@
 <template>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column label="STT" width="50" header-align="center">
+    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
+      <el-table-column type="index" label="STT" width="50" header-align="center">
       </el-table-column>
 
       <el-table-column label="Tên nhóm" header-align="center">
+        <template slot-scope="scope">
+          {{ scope.row.id }}
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Tên nhóm" header-align="center">
+        <template slot-scope="scope">
+          {{ scope.row.name }}
+        </template>
       </el-table-column>
 
       <el-table-column label="Ghi chú" header-align="center">
+        <template slot-scope="scope">
+          {{ scope.row.description }}
+        </template>
       </el-table-column>
     </el-table>
   </template>
 
 <script>
 export default {
+  props: {
+    dataTable: {type: Array},
+    loading: {type: Boolean, default: false}
+  },
   data () {
     return {
-      tableData: [{
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      }, {
-        date: '2016-05-02',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      }, {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      }, {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      }]
     }
   }
 }

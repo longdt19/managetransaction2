@@ -25,3 +25,13 @@
   </el-row>
   </section>
 </template>
+
+<script>
+// import {PRODUCTS_URL} from '@/constants/endpoints'
+export default {
+  methods: {
+    async load_list () {
+    }
+  }
+}
+</script>

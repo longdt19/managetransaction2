@@ -12,13 +12,14 @@
           :api-url="apiUrl"
           :items-create="product_items"
           method-request="post"
+          @done_request="done_request"
         />
     </div></el-col>
 
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component />
+    <table-component ref="table_component"/>
   </div>
 
 </section>
@@ -37,10 +38,25 @@ export default {
         {label: 'Mã sản phẩm', value: '', key: 'code', type: 'text'},
         {label: 'Tên sản phẩm', value: '', key: 'description', type: 'text'},
         {label: 'Mô tả', value: '', key: 'inventory', type: 'text'},
-        {label: 'Tồn', value: '', key: 'name', type: 'text'}
+        {label: 'Tồn', value: '', key: 'name', type: 'text'},
+        {label: 'Ghi chú', value: '', key: 'name', type: 'text'}
       ],
-      apiUrl: PRODUCTS_URL
+      apiUrl: PRODUCTS_URL,
+      loading: false,
+      pagination: {
+        page: 0,
+        size: 10
+      },
+      sorted_by: 'createdAt,desc',
+      data_table: []
     }
+  },
+  methods: {
+    done_request () {
+      this.$refs.table_component.load_list()
+    }
+  },
+  created () {
   }
 }
 </script>

@@ -32,6 +32,7 @@ class Services {
     // axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
     // axios.defaults.withCredentials = true
     // axios.defaults.crossDomain = true
+    console.log('start')
     let request_data = this.make_request_data(request.method, request.payload, handle_progress)
     // do request
     return axios[request.method](request.endpoint, ...request_data).then(response => response).catch(error => error.response)
@@ -94,7 +95,7 @@ class Services {
     if (!this.context) return {}
 
     return {
-      Authorization: this.context.$store.getters['Common/token']
+      // Authorization: this.context.$store.getters['Common/token']
     }
   }
 }

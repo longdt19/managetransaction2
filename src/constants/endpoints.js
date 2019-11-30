@@ -12,4 +12,7 @@ export const BANK_ACCOUNTS_URL = BASE + '/bank-account'
 export const CUSTOMER_URL = BASE + '/customer'
 
 // Customer groups
-export const CUSTOMER_GROUPS_URL = BASE + '/customer-group'
+export const CUSTOMER_GROUPS_URL = BASE + '/customer-group/search'
+
+// Order
+export const ORDERS_URL = BASE + '/order/search'
