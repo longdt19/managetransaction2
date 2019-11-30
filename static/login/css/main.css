@@ -1,0 +1,90 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   font-family: 'Lato', sans-serif;
+   font: inherit;
+}
+.topbar {
+	height: 30px;
+	background: #2c3e50;
+}
+.topbar p {
+	color: #ffffff;
+	font-size: 12px;
+	line-height: 30px;
+}
+.topbar p i{
+	margin-right: 10px;
+	margin-left: 30px;
+}
+.nav-bg{
+	height: 80px;
+	border-bottom: 1px solid #f2f2f2;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+.navbar-brand{
+	padding: 0;
+	margin: 0;
+}
+.nav-bg .navbar-nav .nav-item .nav-link{
+	font-size: 14px;
+	color: #2c3e50;
+	font-weight: 900;
+	padding: 0;
+	height: 80px;
+	line-height: 80px;
+	text-transform: uppercase;
+	margin-left: 20px;
+	box-sizing: border-box;
+}
+.nav-bg .navbar-nav .nav-item .nav-link:hover,
+.nav-bg .navbar-nav .active .nav-link,
+.nav-bg .navbar-nav .active .nav-link:hover, .nav-bg .navbar-nav .nav-item .social-link:hover{
+	color: #fcb040;
+	border-bottom: 5px solid #fcb040;
+}
+.nav-bg .navbar-nav .nav-item .social-link{
+	margin-left:5px;
+}
+.nav-bg .navbar-nav .nav-item .social-link:hover {
+	border-bottom: none;
+}
+.top-footer	{
+	padding-top: 80px;
+	padding-bottom: 80px;
+	background: #34495e;
+}
+.file-name{
+   display: inline-block;
+   font-size: 24px;
+   color: #333;
+}
+.footer{
+   background: #333;
+   display: block;
+   height: 80px;
+   line-height: 80px;
+}

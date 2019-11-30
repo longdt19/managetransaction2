@@ -1,0 +1,155 @@
+*{margin: 0; padding: 0;} 
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: 'Roboto', sans-serif;
+    color: #95a5a6;
+}
+#login-page {
+	display: table;
+	height: 100vh;
+	margin: 0 auto;
+}
+#login-page .container{
+	display: table-cell;
+	vertical-align: middle;
+}
+.col-form{
+	display: table;
+	height: 600px;
+}
+.form-content{
+	display: table-cell;
+	vertical-align: middle;
+}
+.form-tittle {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 700;
+	color: #2c3e50;
+	font-size: 36px;
+	margin-bottom: 10px;
+}
+.form-description{
+	font-size: 14px;
+	margin-bottom: 40px;
+}
+.form-group {
+	margin-bottom: 20px;
+}
+.form-group label{
+	margin-bottom: 10px;
+	color: #2c3e50;
+	font-weight: 500;
+}
+.form-group input {
+	height: 40px;
+	background: #f0f0f0;
+	border: none;
+	font-size: 12px;
+}
+.form-group textarea {
+	background: #f0f0f0;
+	border: none;
+	font-size: 12px;
+}
+.form-group input:focus,.form-group textarea:focus {
+	background: #f0f0f0;
+}
+.btn-primary{
+	background: #62bef6;
+	border-color: #62bef6;
+}
+.btn-primary:hover{
+	background: #16a2f8;
+	border-color: #62bef6;
+}
+/* dashboard*/
+#dashboard{
+	background: #f2f2f2;
+	height: 100vh;
+	overflow-x: scroll;
+}
+.navbar .navbar-brand{
+	font-family: 'Lobster', cursive;
+}
+.navbar-light{
+	box-shadow: 1px 1px 10px rgba(51, 51, 51, 0.23);
+	border:none;
+	margin-bottom: 40px;
+}
+.table thead th{
+	font-weight: 700;
+	color: #2c3e50;
+}
+#dashboard .table td, .table th{
+	vertical-align: middle;
+}
+#dashboard .table td{
+	font-size: 13px;
+}
+.table-striped tbody tr:nth-of-type(odd){
+	background: #fafafa;
+}
+#dashboard .table td i{
+	margin-right: 5px;
+}
+.table-title{
+	font-size: 36px;
+	font-weight: 700;
+	color: #2c3e50;
+	padding:10px;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+.btn {
+	border-radius: 2px;
+}
+.btn-success{
+	background: #1abc9c;
+	border-color: #1abc9c;
+}
+.btn-success:hover{
+	background: #16a085;
+	border-color: #16a085;
+}
+.btn i{
+	color: #fff;
+	margin-left: 5px;
+	margin-right: 0;
+}
+.note{
+	font-size: 12px;
+	margin-top: 10px;
+	line-height: 1.4;
+}
+h3.note-title{
+	font-weight: 500;
+	color: #2c3e50;
+}
+.commit-title, .commit-title a{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #2c3e50;
+}
+.commit p{
+    font-size: 12px;
+    color: #2c3e50;
+}
