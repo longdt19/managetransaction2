@@ -88,22 +88,71 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column label="Ghi chú" header-align="center">
+      <el-table-column label="Thao tác" header-align="center" width="120px">
         <template slot-scope="scope">
-            {{ scope.row.currentPeriodFee }}
+          <el-row>
+            <el-col :span="12" style="text-align: center">
+              <update-component
+                dialog-title="Cập nhật tài khoản ngân hàng"
+                :api-url="apiUrl"
+                :items-create="bank_items"
+                method-request="put"
+                @done_request="done_request"
+                button-size="mini"
+                button-type=""
+                button-icon="el-icon-edit"
+                :scope="scope.row"
+              />
+            </el-col>
+            <el-col :span="12" style="text-align: center">
+              <delete-component
+                :api-url="apiUrl"
+                :scope="scope.row"
+              />
+            </el-col>
+          </el-row>
         </template>
-      </el-table-column> -->
+      </el-table-column>
+
     </el-table>
   </template>
 
 <script>
+import UpdateComponent from '@/components/common/create_or_update'
+import DeleteComponent from '@/components/common/delete'
+import {BANK_ACCOUNTS_URL} from '@/constants/endpoints'
+
 export default {
+  components: {UpdateComponent, DeleteComponent},
   props: {
     dataTable: {type: Array},
     loading: {type: Boolean, default: false}
   },
   data () {
     return {
+      apiUrl: BANK_ACCOUNTS_URL,
+      bank_items: [
+        {label: 'Tên ngân hàng', value: '', key: 'bankName', type: 'text'},
+        {label: 'Tên chủ khoản', value: '', key: 'userName', type: 'text'},
+        {label: 'Số tài khoản', value: '', key: 'accountNumber', type: 'text'},
+        {label: 'Chi nhánh', value: '', key: 'branch', type: 'text'},
+        {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'},
+        {
+          label: 'test select tion',
+          value: '',
+          key: 'selection',
+          type: 'selection',
+          selections: [{id: 'id', name: 'name'}]
+        }
+      ]
+    }
+  },
+  methods: {
+    done_request () {
+      console.log('done update')
+    },
+    set_data (scope) {
+      console.log(scope)
     }
   }
 }

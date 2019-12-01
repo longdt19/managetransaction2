@@ -13,6 +13,7 @@
           :items-create="bank_items"
           method-request="post"
           @done_request="done_request"
+          button-title="Tạo mới"
         />
     </div></el-col>
 
@@ -29,7 +30,7 @@ import CreateComponent from '@/components/common/create_or_update'
 import {BANK_ACCOUNTS_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
-
+/* eslint-disable */
 export default {
   components: {SearchComponent, TableComponent, CreateComponent},
   data () {
@@ -39,11 +40,39 @@ export default {
         {label: 'Tên chủ khoản', value: '', key: 'userName', type: 'text'},
         {label: 'Số tài khoản', value: '', key: 'accountNumber', type: 'text'},
         {label: 'Chi nhánh', value: '', key: 'branch', type: 'text'},
-        {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'}
+        {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'},
+        {
+          label: 'test select tion',
+          value: '',
+          key: 'selection',
+          type: 'selection',
+          selections: [{id: 'id', name: 'name'}]
+        }
       ],
       apiUrl: BANK_ACCOUNTS_URL,
       loading: false,
-      data_table: [],
+      data_table: [
+        {
+          "id": "418d24ae-53fe-4088-820b-3ed8ce0d772d",
+          "createdAt": 1574782637129,
+          "createdBy": "SYSTEM",
+          "updatedAt": 1574792088336,
+          "updatedBy": "SYSTEM",
+          "userName": "Trần Thanh Long",
+          "bankName": "Viecombank",
+          "accountNumber": "1222222222",
+          "branch": "Vietcombank Hà Nội",
+          "balances": 1100000,
+          "currentBalances": null,
+          "previousPeriodFee": 0,
+          "previousPeriodSend": 0,
+          "previousPeriodReceive": 0,
+          "currentPeriodFee": 0,
+          "currentPeriodSend": 0,
+          "currentPeriodReceive": 0,
+          "finalBalances": 1100000
+        }
+      ],
       pagination: {
         page: 0,
         size: 10
@@ -52,30 +81,31 @@ export default {
     }
   },
   methods: {
-    async load_list () {
-      if (this.loading) return
-      this.loading = true
+    // async load_list () {
+    //   if (this.loading) return
+    //   this.loading = true
 
-      const params = {
-        'page': this.pagination.page,
-        'size': this.pagination.size,
-        'sort': this.sorted_by
-      }
+    //   const params = {
+    //     'page': this.pagination.page,
+    //     'size': this.pagination.size,
+    //     'sort': this.sorted_by
+    //   }
 
-      const response = await this.$services.do_request('get', BANK_ACCOUNTS_URL, params)
+    //   const response = await this.$services.do_request('get', BANK_ACCOUNTS_URL, params)
 
-      if (response.status === 200) {
-        this.loading = false
+    //   if (response.status === 200) {
+    //     this.loading = false
 
-        this.data_table = response.data.content
-      }
-    },
+    //     this.data_table = response.data.content
+    //   }
+    // },
     done_request () {
-      this.load_list()
+      console.log('done request')
+      // this.load_list()
     }
   },
   created () {
-    this.load_list()
+    // this.load_list()
   }
 }
 </script>
