@@ -1,0 +1,215 @@
+<template>
+<section>
+  <el-button :type="buttonType" :size="buttonSize"
+    @click="open()" :icon="buttonIcon">{{buttonTitle}}</el-button>
+
+<el-dialog title="Tạo mới" :visible.sync="dialogFormVisible" style="text-align: left">
+  <el-row :gutter="30">
+    <el-col :span="12"><div class="grid-content bg-purple">
+        <el-form>
+
+          <el-form-item label="Thời gian" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="form.time"
+              type="datetime"
+              default-time="12:00:00"
+              :defaul-value="Date()"
+              value-format="timestamp">
+            </el-date-picker>
+          </el-form-item>
+
+          <el-form-item label="Mã giao dịch" :label-width="formLabelWidth">
+            <el-input v-model="form.code"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Khách hàng" :label-width="formLabelWidth">
+            <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
+              filterable
+              @focus="get_customer_list()"
+              :loading="customer.loading"
+            >
+              <el-option
+                v-for="c in customer.list"
+                :key="c.id"
+                :label="c.name"
+                :value="c.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="Loại" :label-width="formLabelWidth">
+            <el-radio-group v-model="form.type">
+              <el-radio
+                v-for="(type, index) in order_type_list"
+                v-bind:key="index"
+                :label="type.value"/>
+            </el-radio-group>
+
+          </el-form-item>
+
+          <el-form-item label="Ghi chú" :label-width="formLabelWidth">
+            <el-input v-model="form.note"></el-input>
+          </el-form-item>
+
+        </el-form>
+    </div></el-col>
+
+    <el-col :span="12"><div>
+        <el-form>
+          <el-form-item label="Sản phẩm" :label-width="formLabelWidth">
+            <el-select v-model="form.productId" placeholder="Vui lòng chọn"
+              filterable
+              @focus="get_product_list()"
+              :loading="product.loading"
+            >
+              <el-option
+                v-for="c in product.list"
+                :key="c.id"
+                :label="c.name"
+                :value="c.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="Nhập" :label-width="formLabelWidth">
+            <el-input v-model="form.cost"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Chiết khấu (%)" :label-width="formLabelWidth">
+            <el-input v-model="form.extracts"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Tổng" :label-width="formLabelWidth">
+            <el-input v-model="form.total"></el-input>
+          </el-form-item>
+
+        </el-form>
+    </div></el-col>
+
+  </el-row>
+  <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="create()" :loading="loading">Xác nhận</el-button>
+    <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
+  </span>
+</el-dialog>
+</section>
+</template>
+
+<script>
+import {ORDER_TYPE_LIST} from '@/constants'
+import {CUSTOMER_URL, PRODUCTS_URL, ORDERS_URL} from '@/constants/endpoints'
+
+export default {
+  props: {
+    scope: {type: Object},
+    buttonSize: {type: String},
+    buttonIcon: {type: String},
+    buttonTitle: {type: String},
+    buttonType: {type: String}
+  },
+  data () {
+    return {
+      dialogFormVisible: false,
+      form: {
+        time: null,
+        code: null,
+        customerId: null,
+        discount: null,
+        extracts: null,
+        total: null,
+        note: null,
+        productId: null,
+        type: 'XUAT'
+      },
+      formLabelWidth: '120px',
+      pagination: {
+        page: 0,
+        size: 100
+      },
+      sorted_by: 'createdAt,desc',
+      customer: {
+        loading: false,
+        list: []
+      },
+      order_type_list: ORDER_TYPE_LIST,
+      product: {
+        loading: false,
+        list: []
+      },
+      loading: false
+    }
+  },
+  methods: {
+    open () {
+      if (this.scope) {
+        this.form = this.scope
+      }
+      this.dialogFormVisible = true
+    },
+    async create () {
+      if (this.loading) return
+      this.loading = true
+
+      const payload = this.form
+      let url = ORDERS_URL.replace('/search', '')
+      let method = 'post'
+      if (this.scope) {
+        method = 'put'
+        url = url + '/' + this.scope.id
+      }
+      const response = await this.$services.do_request(method, url, payload)
+      this.loading = false
+
+      if (response.status === 200) {
+        this.$message.success('Tạo mới thành công')
+      }
+      if (response.status === 202) {
+        this.$message.success('Cập nhật thành công')
+      }
+
+      this.loading = false
+      this.$emit('done_request')
+      this.dialogFormVisible = false
+    },
+    async get_customer_list () {
+      if (this.customer.list.length) return
+      if (this.customer.loading) return
+      this.customer.loading = true
+
+      const params = {
+        'page': this.pagination.page,
+        'size': this.pagination.size,
+        'sort': this.sorted_by
+      }
+
+      const response = await this.$services.do_request('get', CUSTOMER_URL, params)
+      this.customer.loading = false
+
+      if (response.status === 200) {
+        this.customer.list = response.data.content
+      }
+    },
+    async get_product_list () {
+      if (this.product.list.length) return
+      if (this.product.loading) return
+      this.product.loading = true
+
+      const params = {
+        'page': this.pagination.page,
+        'size': this.pagination.size,
+        'sort': this.sorted_by
+      }
+
+      const response = await this.$services.do_request('get', PRODUCTS_URL, params)
+      this.product.loading = false
+
+      if (response.status === 200) {
+        this.product.list = response.data.content
+      }
+    }
+  }
+}
+</script>
+
+<style lang="css">
+</style>

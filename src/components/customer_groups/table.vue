@@ -5,12 +5,6 @@
 
       <el-table-column label="Tên nhóm" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.id }}
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Tên nhóm" header-align="center">
-        <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
@@ -20,17 +14,59 @@
           {{ scope.row.description }}
         </template>
       </el-table-column>
+
+      <el-table-column label="Thao tác" header-align="center" width="120px">
+        <template slot-scope="scope">
+          <el-row>
+            <el-col :span="12" style="text-align: center">
+              <update-component
+                dialog-title="Cập nhật tài khoản ngân hàng"
+                :api-url="apiUrl"
+                :items-create="customer_items"
+                method-request="put"
+                @done_request="done_request"
+                button-size="mini"
+                button-type=""
+                button-icon="el-icon-edit"
+                :scope="scope.row"
+              />
+            </el-col>
+            <el-col :span="12" style="text-align: center">
+              <delete-component
+                :api-url="apiUrl"
+                :scope="scope.row"
+                @done_request="done_request"
+              />
+            </el-col>
+          </el-row>
+        </template>
+      </el-table-column>
     </el-table>
   </template>
 
 <script>
+import {CUSTOMER_GROUPS_URL} from '@/constants/endpoints'
+import UpdateComponent from '@/components/common/create_or_update'
+import DeleteComponent from '@/components/common/delete'
+
 export default {
+  components: {UpdateComponent, DeleteComponent},
   props: {
     dataTable: {type: Array},
     loading: {type: Boolean, default: false}
   },
   data () {
     return {
+      customer_items: [
+        {label: 'Tên nhóm', value: '', key: 'name', type: 'text'},
+        {label: 'Ghi chú', value: '', key: 'description', type: 'text'}
+      ],
+      apiUrl: CUSTOMER_GROUPS_URL
+    }
+  },
+  methods: {
+    done_request () {
+      this.$emit('done_request')
     }
   }
 }

@@ -34,7 +34,7 @@
             </el-form>
         </div></el-col>
 
-        <el-col :span="12"><div >
+        <el-col :span="12"><div>
             <el-form>
 
               <div v-for="(item, index) in get_part_items(2)" v-bind:key="index">
@@ -98,13 +98,6 @@ export default {
       }
       return this.itemsCreate.slice(Math.ceil((this.itemsCreate.length) / 2))
     },
-    do_request () {
-      let payload = {}
-
-      this.itemsCreate.forEach(item => {
-        payload[item.key] = item.value
-      })
-    },
     prepare_payload_update () {
       this.itemsCreate.forEach(item => {
         item.value = this.scope[item.key]
@@ -115,23 +108,35 @@ export default {
         this.prepare_payload_update()
       }
       this.dialogFormVisible = true
+    },
+    async do_request () {
+      if (this.loading) return
+      this.loading = true
+
+      let payload = {}
+      this.itemsCreate.forEach(item => {
+        payload[item.key] = item.value
+      })
+
+      let url = this.apiUrl
+      if (this.methodRequest === 'put') {
+        url = url + '/' + this.scope.id
+      }
+
+      const response = await this.$services.do_request(this.methodRequest, url, payload)
+      this.loading = false
+
+      if (response.status === 200) {
+        this.$message.success('Tạo mới thành công')
+      }
+      if (response.status === 202) {
+        this.$message.success('Cập nhật thành công')
+      }
+
+      this.loading = false
+      this.$emit('done_request')
+      this.dialogFormVisible = false
     }
-    // async do_request () {
-    //   if (this.loading) return
-
-    //   let payload = {}
-    //   this.itemsCreate.forEach(item => {
-    //     payload[item.key] = item.value
-    //   })
-
-    //   const response = await this.$services.do_request(this.methodRequest, this.apiUrl, payload)
-    //   if (response.status === 200) {
-    //     this.loading = false
-    //     this.$message.success('Success')
-    //     this.$emit('done_request')
-    //     this.dialogFormVisible = false
-    //   }
-    // }
   }
 }
 </script>

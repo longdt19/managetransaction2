@@ -13,13 +13,14 @@
           :items-create="product_items"
           method-request="post"
           @done_request="done_request"
+          button-title="Tạo mới"
         />
     </div></el-col>
 
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component ref="table_component"/>
+    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
   </div>
 
 </section>
@@ -38,8 +39,7 @@ export default {
         {label: 'Mã sản phẩm', value: '', key: 'code', type: 'text'},
         {label: 'Tên sản phẩm', value: '', key: 'description', type: 'text'},
         {label: 'Mô tả', value: '', key: 'inventory', type: 'text'},
-        {label: 'Tồn', value: '', key: 'name', type: 'text'},
-        {label: 'Ghi chú', value: '', key: 'name', type: 'text'}
+        {label: 'Tồn', value: '', key: 'name', type: 'text'}
       ],
       apiUrl: PRODUCTS_URL,
       loading: false,
@@ -52,11 +52,30 @@ export default {
     }
   },
   methods: {
+    async load_list () {
+      if (this.loading) return
+      this.loading = true
+
+      const params = {
+        'page': this.pagination.page,
+        'size': this.pagination.size,
+        'sort': this.sorted_by
+      }
+
+      const response = await this.$services.do_request('get', PRODUCTS_URL, params)
+
+      if (response.status === 200) {
+        this.loading = false
+
+        this.data_table = response.data.content
+      }
+    },
     done_request () {
-      this.$refs.table_component.load_list()
+      this.load_list()
     }
   },
   created () {
+    this.load_list()
   }
 }
 </script>

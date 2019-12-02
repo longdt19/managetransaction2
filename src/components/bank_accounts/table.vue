@@ -108,6 +108,7 @@
               <delete-component
                 :api-url="apiUrl"
                 :scope="scope.row"
+                @done_request="done_request"
               />
             </el-col>
           </el-row>
@@ -136,23 +137,13 @@ export default {
         {label: 'Tên chủ khoản', value: '', key: 'userName', type: 'text'},
         {label: 'Số tài khoản', value: '', key: 'accountNumber', type: 'text'},
         {label: 'Chi nhánh', value: '', key: 'branch', type: 'text'},
-        {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'},
-        {
-          label: 'test select tion',
-          value: '',
-          key: 'selection',
-          type: 'selection',
-          selections: [{id: 'id', name: 'name'}]
-        }
+        {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'}
       ]
     }
   },
   methods: {
     done_request () {
-      console.log('done update')
-    },
-    set_data (scope) {
-      console.log(scope)
+      this.$emit('done_request')
     }
   }
 }

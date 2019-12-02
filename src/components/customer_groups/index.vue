@@ -13,13 +13,14 @@
           :items-create="customer_items"
           method-request="post"
           @done_request="done_request"
+          button-title="Tạo mới"
         />
     </div></el-col>
 
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component :data-table="data_table" :loading="loading"/>
+    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
   </div>
 
 </section>
@@ -39,6 +40,7 @@ export default {
         {label: 'Ghi chú', value: '', key: 'description', type: 'text'}
       ],
       apiUrl: CUSTOMER_GROUPS_URL,
+      data_table: [],
       loading: false,
       pagination: {
         page: 0,
@@ -57,8 +59,8 @@ export default {
         'size': this.pagination.size,
         'sort': this.sorted_by
       }
-
-      const response = await this.$services.do_request('get', CUSTOMER_GROUPS_URL, params)
+      let url = CUSTOMER_GROUPS_URL + '/search'
+      const response = await this.$services.do_request('get', url, params)
 
       if (response.status === 200) {
         this.loading = false

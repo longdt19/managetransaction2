@@ -6,14 +6,10 @@
     </div></el-col>
 
     <el-col :span="12"><div style="text-align: right;">
-        <create-component
-          style="text-align: right;"
-          dialog-title="Tạo mới đơn hàng"
-          :api-url="apiUrl"
-          :items-create="customer_items"
-          method-request="post"
-          @done_request="done_request"
-        />
+      <create-component
+        @done_request="done_request"
+        button-title="Tạo mới"
+        button-type='primary'/>
     </div></el-col>
 
   </el-row>
@@ -25,10 +21,10 @@
 </section>
 </template>
 <script>
-import CreateComponent from '@/components/common/create_or_update'
 import {ORDERS_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
+import CreateComponent from './create_or_update'
 
 export default {
   components: {SearchComponent, TableComponent, CreateComponent},
@@ -36,6 +32,14 @@ export default {
     return {
       customer_items: [
         {label: 'Tên nhóm', value: '', key: 'name', type: 'text'},
+        {label: 'User', value: '', key: 'description', type: 'text'},
+        {label: 'Sản phẩm', value: '', key: 'description', type: 'text'},
+        {label: 'Loại', value: '', key: 'description', type: 'text'},
+        {label: 'Nhập', value: '', key: 'description', type: 'text'},
+        {label: 'Chiết khấu', value: '', key: 'description', type: 'text'},
+        {label: 'Tổng', value: '', key: 'description', type: 'text'},
+        {label: 'Ghi chú', value: '', key: 'description', type: 'text'},
+        {label: 'Ghi chú', value: '', key: 'description', type: 'text'},
         {label: 'Ghi chú', value: '', key: 'description', type: 'text'}
       ],
       apiUrl: ORDERS_URL,
@@ -60,6 +64,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', ORDERS_URL, params)
+      this.loading = false
 
       if (response.status === 200) {
         this.loading = false
