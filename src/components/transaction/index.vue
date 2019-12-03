@@ -47,7 +47,7 @@ export default {
       data_table: [],
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc'
     }
@@ -60,7 +60,9 @@ export default {
       const params = {
         'page': this.pagination.page,
         'size': this.pagination.size,
-        'sort': this.sorted_by
+        'sort': this.sorted_by,
+        'fromDate': '03-12-2019',
+        'toDate': '05-12-2019'
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, params)

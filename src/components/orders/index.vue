@@ -9,13 +9,14 @@
       <create-component
         @done_request="done_request"
         button-title="Tạo mới"
-        button-type='primary'/>
+        button-type='primary'
+      />
     </div></el-col>
 
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component :data-table="data_table" :loading="loading"/>
+    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
   </div>
 
 </section>
@@ -30,24 +31,11 @@ export default {
   components: {SearchComponent, TableComponent, CreateComponent},
   data () {
     return {
-      customer_items: [
-        {label: 'Tên nhóm', value: '', key: 'name', type: 'text'},
-        {label: 'User', value: '', key: 'description', type: 'text'},
-        {label: 'Sản phẩm', value: '', key: 'description', type: 'text'},
-        {label: 'Loại', value: '', key: 'description', type: 'text'},
-        {label: 'Nhập', value: '', key: 'description', type: 'text'},
-        {label: 'Chiết khấu', value: '', key: 'description', type: 'text'},
-        {label: 'Tổng', value: '', key: 'description', type: 'text'},
-        {label: 'Ghi chú', value: '', key: 'description', type: 'text'},
-        {label: 'Ghi chú', value: '', key: 'description', type: 'text'},
-        {label: 'Ghi chú', value: '', key: 'description', type: 'text'}
-      ],
-      apiUrl: ORDERS_URL,
       loading: false,
       data_table: [],
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc'
     }

@@ -31,7 +31,7 @@
               <el-option
                 v-for="c in customer.list"
                 :key="c.id"
-                :label="c.name"
+                :label="c.azAccount"
                 :value="c.id"
               ></el-option>
             </el-select>
@@ -136,13 +136,17 @@ export default {
         loading: false,
         list: []
       },
-      loading: false
+      loading: false,
+      old_state: {}
     }
   },
   methods: {
     open () {
       if (this.scope) {
-        this.form = this.scope
+        this.form = Object.assign({}, this.scope)
+        this.form.productId = this.scope.productName
+        this.form.customerId = this.scope.azAccount
+        this.old_state = Object.assign({}, this.form)
       }
       this.dialogFormVisible = true
     },
@@ -150,13 +154,17 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const payload = this.form
       let url = ORDERS_URL.replace('/search', '')
       let method = 'post'
       if (this.scope) {
         method = 'put'
         url = url + '/' + this.scope.id
+
+        this.form.customerId = this.form.customerId === this.old_state.customerId ? this.scope.customerId : this.form.customerId
+        this.form.productId = this.form.productId === this.old_state.productId ? this.scope.productId : this.form.productId
       }
+
+      const payload = this.form
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false
 
@@ -186,7 +194,7 @@ export default {
       this.customer.loading = false
 
       if (response.status === 200) {
-        this.customer.list = response.data.content
+        this.customer.list = response.data
       }
     },
     async get_product_list () {

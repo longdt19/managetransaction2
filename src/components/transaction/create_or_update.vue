@@ -34,7 +34,13 @@
         </el-form-item>
 
         <el-form-item label="Loại" :label-width="formLabelWidth">
-          <el-input v-model="form.type"></el-input>
+          <el-radio-group v-model="form.type">
+            <el-radio
+              v-for="(type, index) in transaction_type_list"
+              v-bind:key="index"
+              :label="type.value"
+              :value="type.key"/>
+          </el-radio-group>
         </el-form-item>
 
       </el-form>
@@ -42,6 +48,14 @@
 
     <el-col :span="12"><div>
       <el-form :model="form">
+
+        <el-form-item label="Người giao dịch" :label-width="formLabelWidth">
+          <el-input v-model="form.traders"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Ghi chú" :label-width="formLabelWidth">
+          <el-input v-model="form.note"></el-input>
+        </el-form-item>
 
         <el-form-item label="Ngân hàng" :label-width="formLabelWidth">
           <el-select v-model="form.bankAccountId" placeholder="Vui lòng chọn"
@@ -74,9 +88,17 @@
         </el-form-item>
 
         <el-form-item label="Đơn hàng" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="Please select a zone">
-            <el-option label="Zone No.1" value="shanghai"></el-option>
-            <el-option label="Zone No.2" value="beijing"></el-option>
+          <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
+            filterable
+            @focus="get_order_list()"
+            :loading="order.loading"
+          >
+            <el-option
+              v-for="b in order.list"
+              :key="b.id"
+              :label="b.code"
+              :value="b.id"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -85,8 +107,8 @@
   </el-row>
 
   <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false">Cancel</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+    <el-button type="primary" @click="create()" :loading="loading">Xác nhận</el-button>
+    <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
   </span>
 </el-dialog>
 </section>
@@ -95,8 +117,11 @@
 <script>
 import {
   BANK_ACCOUNTS_URL,
-  CUSTOMER_URL
+  CUSTOMER_URL,
+  ORDERS_URL,
+  TRANSACTION_URL
 } from '@/constants/endpoints'
+import {TRANSACTION_TYPE_LIST} from '@/constants'
 
 export default {
   props: {
@@ -118,7 +143,9 @@ export default {
         money: null,
         orderId: null,
         time: null,
-        type: 'CHUYEN_TIEN'
+        type: 'CHUYEN_TIEN',
+        traders: null,
+        note: null
       },
       formLabelWidth: '120px',
       loading: false,
@@ -135,12 +162,54 @@ export default {
       customers: {
         loading: false,
         list: []
-      }
+      },
+      order: {
+        loading: false,
+        list: []
+      },
+      transaction_type_list: TRANSACTION_TYPE_LIST,
+      old_state: {}
     }
   },
   methods: {
     open () {
+      if (this.scope) {
+        this.form = Object.assign({}, this.scope)
+        this.form.bankAccountId = this.scope.bankName
+        this.form.customerId = this.scope.azAccount
+        this.form.orderId = this.scope.orderCode
+        this.old_state = Object.assign({}, this.form)
+      }
       this.dialogFormVisible = true
+    },
+    async create () {
+      if (this.loading) return
+      this.loading = true
+      let method = 'post'
+      let url = TRANSACTION_URL.replace('/search', '')
+
+      if (this.scope) {
+        method = 'put'
+        url = url + '/' + this.scope.id
+
+        this.form.bankAccountId = this.form.bankAccountId === this.old_state.bankAccountId ? this.scope.bankAccountId : this.form.bankAccountId
+        this.form.customerId = this.form.customerId === this.old_state.customerId ? this.scope.customerId : this.form.customerId
+        this.form.orderId = this.form.orderId === this.old_state.orderId ? this.scope.orderId : this.form.orderId
+      }
+
+      const payload = this.form
+      const response = await this.$services.do_request(method, url, payload)
+      this.loading = false
+
+      if (response.status === 200) {
+        this.$message.success('Tạo mới thành công')
+      }
+      if (response.status === 202) {
+        this.$message.success('Cập nhật thành công')
+      }
+
+      this.$emit('done_request')
+      this.dialogFormVisible = false
     },
     async get_customer_list () {
       if (this.customers.loading) return
@@ -158,7 +227,7 @@ export default {
       if (response.status === 200) {
         this.customers.loading = false
 
-        this.customers.list = response.data.content
+        this.customers.list = response.data
       }
     },
     async get_bank_account_list () {
@@ -177,7 +246,26 @@ export default {
       if (response.status === 200) {
         this.bank_accounts.loading = false
 
-        this.bank_accounts.list = response.data.content
+        this.bank_accounts.list = response.data
+      }
+    },
+    async get_order_list () {
+      if (this.order.loading) return
+      if (this.order.list.length) return
+      this.order.loading = true
+
+      const params = {
+        'page': this.pagination.page,
+        'size': this.pagination.size,
+        'sort': this.sorted_by
+      }
+
+      const response = await this.$services.do_request('get', ORDERS_URL, params)
+
+      if (response.status === 200) {
+        this.order.loading = false
+
+        this.order.list = response.data.content
       }
     }
   }

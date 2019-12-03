@@ -1,4 +1,5 @@
 <template>
+  <section>
     <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
       <el-table-column type="index" label="STT" width="50" header-align="center">
       </el-table-column>
@@ -116,7 +117,17 @@
       </el-table-column>
 
     </el-table>
-  </template>
+
+    <div class="" style="text-align: right; margin-top: 30px">
+      <el-pagination
+        :page-size="10"
+        :pager-count="11"
+        layout="prev, pager, next"
+        :total="6">
+      </el-pagination>
+    </div>
+  </section>
+</template>
 
 <script>
 import UpdateComponent from '@/components/common/create_or_update'

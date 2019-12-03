@@ -27,7 +27,7 @@
 </template>
 <script>
 import CreateComponent from '@/components/common/create_or_update'
-import {PRODUCTS_URL} from '@/constants/endpoints'
+import {PRODUCTS_URL, PRODUCTS_TABLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 
@@ -45,7 +45,7 @@ export default {
       loading: false,
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc',
       data_table: []
@@ -62,7 +62,7 @@ export default {
         'sort': this.sorted_by
       }
 
-      const response = await this.$services.do_request('get', PRODUCTS_URL, params)
+      const response = await this.$services.do_request('get', PRODUCTS_TABLE_URL, params)
 
       if (response.status === 200) {
         this.loading = false

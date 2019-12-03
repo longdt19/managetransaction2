@@ -27,7 +27,7 @@
 </template>
 <script>
 import CreateComponent from '@/components/common/create_or_update'
-import {BANK_ACCOUNTS_URL} from '@/constants/endpoints'
+import {BANK_ACCOUNTS_TABLE_URL, BANK_ACCOUNTS_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -47,7 +47,7 @@ export default {
       data_table: [],
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc'
     }
@@ -63,7 +63,7 @@ export default {
         'sort': this.sorted_by
       }
 
-      const response = await this.$services.do_request('get', BANK_ACCOUNTS_URL, params)
+      const response = await this.$services.do_request('get', BANK_ACCOUNTS_TABLE_URL, params)
 
       if (response.status === 200) {
         this.loading = false

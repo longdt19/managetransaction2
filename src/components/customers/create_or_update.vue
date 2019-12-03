@@ -169,17 +169,21 @@ export default {
         size: 100
       },
       sorted_by: 'createdAt,desc',
-      loading: false
+      loading: false,
+      old_state: {}
     }
   },
   methods: {
     open () {
       if (this.scope) {
-        this.form = this.scope
+        this.form = Object.assign({}, this.scope)
+
         this.form.groupId = this.scope.groupName
         this.form.provinceId = this.scope.provinceName
         this.form.districtId = this.scope.districtName
         this.form.wardId = this.scope.wardName
+
+        this.old_state = Object.assign({}, this.form)
       }
       this.dialogFormVisible = true
     },
@@ -187,13 +191,19 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const payload = this.form
       let url = CUSTOMER_URL
       let method = 'post'
       if (this.scope) {
         method = 'put'
         url = url + '/' + this.scope.id
+
+        this.form.groupId = this.form.groupId === this.old_state.groupId ? this.scope.groupId : this.form.groupId
+        this.form.provinceId = this.form.provinceId === this.old_state.provinceId ? this.scope.provinceId : this.form.provinceId
+        this.form.districtId = this.form.districtId === this.old_state.districtId ? this.scope.districtId : this.form.districtId
+        this.form.wardId = this.form.wardId === this.old_state.wardId ? this.scope.wardId : this.form.wardId
       }
+
+      const payload = this.form
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false
 
@@ -253,8 +263,8 @@ export default {
       if (this.district.list.length) return
       if (this.district.loading) return
       this.district.loading = true
-
-      let url = LOCAL_DISTRICT_URL + '?provinceId=' + this.form.provinceId
+      let provinceId = this.form.provinceId === this.old_state.provinceId ? this.scope.provinceId : this.form.provinceId
+      let url = LOCAL_DISTRICT_URL + '?provinceId=' + provinceId
       const response = await this.$services.do_request('get', url)
 
       this.district.loading = false
@@ -268,7 +278,9 @@ export default {
       if (this.ward.loading) return
       this.ward.loading = true
 
-      let url = LOCAL_WARD_URL + '?districtId=' + this.form.districtId
+      let districtId = this.form.districtId === this.old_state.districtId ? this.scope.districtId : this.form.districtId
+
+      let url = LOCAL_WARD_URL + '?districtId=' + districtId
       const response = await this.$services.do_request('get', url)
 
       this.ward.loading = false

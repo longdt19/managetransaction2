@@ -1,11 +1,12 @@
 <template>
+  <section>
     <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
       <el-table-column type="index" label="STT" width="50"  header-align="center">
       </el-table-column>
 
       <el-table-column label="Ngày" width="150"  header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.time}}
+          {{ date_from_timestamp(scope.row.time)}}
         </template>
       </el-table-column>
 
@@ -85,6 +86,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                @done_request="done_request"
                 :scope="scope.row"
                 button-size="mini"
                 button-icon="el-icon-edit"
@@ -102,9 +104,21 @@
       </el-table-column>
 
     </el-table>
-  </template>
+
+    <div class="" style="text-align: right; margin-top: 30px">
+      <el-pagination
+        :page-size="10"
+        :pager-count="11"
+        layout="prev, pager, next"
+        :total="6">
+      </el-pagination>
+    </div>
+  </section>
+</template>
 
 <script>
+import date_from_timestamp from '@/utils/date_from_timestamp'
+
 import DeleteComponent from '@/components/common/delete'
 import {ORDERS_URL} from '@/constants/endpoints'
 import UpdateComponent from './create_or_update'
@@ -121,6 +135,7 @@ export default {
     }
   },
   methods: {
+    date_from_timestamp,
     done_request () {
       this.$emit('done_request')
     }

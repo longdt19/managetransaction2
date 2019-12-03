@@ -6,3 +6,8 @@ export const ORDER_TYPE_LIST = [
   {key: 'Xuất', value: 'XUAT'},
   {key: 'Nhập', value: 'NHAP'}
 ]
+
+export const TRANSACTION_TYPE_LIST = [
+  {key: 'Chuyển tiền', value: 'CHUYEN_TIEN'},
+  {key: 'Nhận tiền', value: 'NHAN_TIEN'}
+]

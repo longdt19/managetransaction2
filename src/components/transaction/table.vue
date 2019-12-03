@@ -1,23 +1,24 @@
 <template>
+  <section>
     <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
       <el-table-column type="index" label="STT" width="50">
       </el-table-column>
 
       <el-table-column label="Ngày" width="120">
         <template slot-scope="scope">
-          {{ scope.row.time}}
+          {{ date_from_timestamp(scope.row.time)}}
         </template>
       </el-table-column>
 
       <el-table-column label="Người giao dịch" width="100">
         <template slot-scope="scope">
-          {{ scope.row.createdBy}}
+          {{ scope.row.traders}}
         </template>
       </el-table-column>
 
       <el-table-column label="Tên" width="120">
         <template slot-scope="scope">
-          {{ scope.row.customer ? scope.row.customer.name : ''}}
+          {{ scope.row.azAccount }}
         </template>
       </el-table-column>
 
@@ -39,7 +40,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Loại" width="100">
+      <el-table-column label="Loại" width="120">
         <template slot-scope="scope">
           {{ scope.row.type }}
         </template>
@@ -104,11 +105,21 @@
       </el-table-column>
 
     </el-table>
-  </template>
+
+    <div class="" style="text-align: right; margin-top: 30px">
+      <el-pagination
+        :page-size="10"
+        :pager-count="11"
+        layout="prev, pager, next"
+        :total="6">
+      </el-pagination>
+    </div>
+  </section>
+</template>
 
 <script>
+import date_from_timestamp from '@/utils/date_from_timestamp'
 import {TRANSACTION_URL} from '@/constants/endpoints'
-
 import DeleteComponent from '@/components/common/delete'
 import UpdateComponent from './create_or_update'
 
@@ -124,6 +135,7 @@ export default {
     }
   },
   methods: {
+    date_from_timestamp,
     done_request () {
       this.$emit('done_request')
     }

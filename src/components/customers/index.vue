@@ -21,7 +21,7 @@
 </section>
 </template>
 <script>
-import {CUSTOMER_URL, CUSTOMER_GROUPS_URL} from '@/constants/endpoints'
+import {CUSTOMER_TABLE_URL, CUSTOMER_GROUPS_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 import CreateComponent from './create_or_update'
@@ -40,12 +40,11 @@ export default {
         {label: 'Tỉnh', value: '', key: 'province', type: 'text'},
         {label: 'Ghi chú', value: '', key: 'note', type: 'text'}
       ],
-      apiUrl: CUSTOMER_URL,
       loading: false,
       data_table: [],
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc',
       customer_groups_list: []
@@ -62,7 +61,7 @@ export default {
         'sort': this.sorted_by
       }
 
-      const response = await this.$services.do_request('get', CUSTOMER_URL, params)
+      const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.loading = false
       if (response.status === 200) {
         this.loading = false

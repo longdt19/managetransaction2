@@ -41,6 +41,8 @@ export default {
       date1: null,
       date2: null
     }
+  },
+  methods: {
   }
 }
 </script>

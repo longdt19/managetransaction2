@@ -44,7 +44,7 @@ export default {
       loading: false,
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc'
     }
