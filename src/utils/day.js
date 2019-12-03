@@ -3,6 +3,6 @@ export default function getDays () {
   let today = new Date()
   return {
     from_date: `01-${today.getMonth() + 1}-${today.getFullYear()}`,
-    to_date: `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`
+    to_date: Date.now()
   }
 }

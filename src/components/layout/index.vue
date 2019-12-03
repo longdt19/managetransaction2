@@ -45,9 +45,9 @@ export default {
     }
   },
   beforeCreate () {
-    // if (!this.$store.getters['Common/token']) {
-    //   this.$router.push('/login')
-    // }
+    if (!this.$store.getters['Common/token']) {
+      this.$router.push('/login')
+    }
   }
 }
 </script>

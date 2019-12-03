@@ -60,9 +60,7 @@ export default {
       const params = {
         'page': this.pagination.page,
         'size': this.pagination.size,
-        'sort': this.sorted_by,
-        'fromDate': '03-12-2019',
-        'toDate': '05-12-2019'
+        'sort': this.sorted_by
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, params)

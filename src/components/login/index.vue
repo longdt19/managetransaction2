@@ -37,22 +37,28 @@ export default {
       if (this.loading) return
 
       this.loading = true
-
-      const data = {
-        username: this.username,
-        password: this.password
-      }
-
-      const response = await this.$services.do_request('post', LOGIN_URL, data)
+      var formData = new FormData()
+      formData.append('userName', this.username)
+      formData.append('password', this.password)
+      // const data = {
+      //   userName: this.username,
+      //   password: this.password
+      // }
+      const response = await this.$services.do_request('post', LOGIN_URL, formData)
       this.loading = false
+      console.log('response', response)
 
-      if (response.data.data) {
-        const token = response.data.data.tokenState.jwt
+      if (response.status === 200) {
+        const token = response.data.accessToken
         this.$store.commit('Common/tokenLoaded', token)
-        const username = response.data.data.username
-        this.$store.commit('Common/username', username)
-        const navigation = response.data.data.listRoleNavigation
-        this.$store.commit('Common/navigation', navigation)
+        const userInfo = response.datajwtTokenUser
+        this.$store.commit('Common/user_info_loaded', userInfo)
+        var tomorrow = new Date()
+        tomorrow.setDate(new Date().getDate() + 1)
+        this.$store.commit('Common/tomorrow_loaded', tomorrow.getTime())
+
+        // const navigation = response.data.data.listRoleNavigation
+        // this.$store.commit('Common/navigation', navigation)
 
         // set default day to search
         // let search = getDays()

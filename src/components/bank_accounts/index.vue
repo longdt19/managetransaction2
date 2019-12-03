@@ -60,7 +60,9 @@ export default {
       const params = {
         'page': this.pagination.page,
         'size': this.pagination.size,
-        'sort': this.sorted_by
+        'sort': this.sorted_by,
+        'fromDate': 1575133200000,
+        'toDate': this.common_data.tomorrow
       }
 
       const response = await this.$services.do_request('get', BANK_ACCOUNTS_TABLE_URL, params)
