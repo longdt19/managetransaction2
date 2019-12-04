@@ -49,9 +49,9 @@ export default {
     return {
       product_items: [
         {label: 'Mã sản phẩm', value: '', key: 'code', type: 'text'},
-        {label: 'Tên sản phẩm', value: '', key: 'description', type: 'text'},
-        {label: 'Mô tả', value: '', key: 'inventory', type: 'text'},
-        {label: 'Tồn', value: '', key: 'name', type: 'text'}
+        {label: 'Tên sản phẩm', value: '', key: 'name', type: 'text'},
+        {label: 'Mô tả', value: '', key: 'description', type: 'text'},
+        {label: 'Tồn', value: '', key: 'inventory', type: 'text'}
       ],
       apiUrl: PRODUCTS_URL,
       loading: false,
