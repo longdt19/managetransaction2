@@ -2,7 +2,7 @@
 <section>
   <el-row :gutter="50">
     <el-col :span="12"><div class="grid-content bg-purple">
-        <search-component />
+        <search-component @done_request="done_request"/>
     </div></el-col>
 
     <el-col :span="12"><div style="text-align: right;">
@@ -15,37 +15,40 @@
   </el-row>
 
   <div style="margin-top: 30px">
-    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
+    <select-perpage-component />
+    <table-component
+      @done_request="done_request"
+      :data-table="data_table"
+      :loading="loading"
+    />
+    <div class="" style="text-align: right; margin-top: 30px">
+      <pagination-component />
+    </div>
   </div>
 
 </section>
 </template>
 <script>
-import {CUSTOMER_TABLE_URL, CUSTOMER_GROUPS_URL} from '@/constants/endpoints'
+import {CUSTOMER_TABLE_URL} from '@/constants/endpoints'
+import SelectPerpageComponent from '@/components/common/select_perpage'
+import PaginationComponent from '@/components/common/pagination'
+
 import SearchComponent from './search'
 import TableComponent from './table'
 import CreateComponent from './create_or_update'
 
 export default {
-  components: {SearchComponent, TableComponent, CreateComponent},
+  components: {
+    SearchComponent,
+    TableComponent,
+    CreateComponent,
+    SelectPerpageComponent,
+    PaginationComponent
+  },
   data () {
     return {
-      customer_items: [
-        {label: 'Tên khách hàng', value: '', key: 'name', type: 'text'},
-        {label: 'User', value: '', key: 'azAccount', type: 'text'},
-        {label: 'Số điện thoại', value: '', key: 'phone', type: 'text'},
-        {label: 'Người quản lý', value: '', key: 'manager', type: 'text'},
-        {label: 'Nợ trước', value: '', key: 'debtBefore', type: 'text'},
-        {label: 'Địa chỉ', value: '', key: 'address', type: 'text'},
-        {label: 'Tỉnh', value: '', key: 'province', type: 'text'},
-        {label: 'Ghi chú', value: '', key: 'note', type: 'text'}
-      ],
       loading: false,
       data_table: [],
-      pagination: {
-        page: 0,
-        size: 100
-      },
       sorted_by: 'createdAt,desc',
       customer_groups_list: []
     }
@@ -56,59 +59,45 @@ export default {
       this.loading = true
 
       const params = {
-        'page': this.pagination.page,
-        'size': this.pagination.size,
+        'page': this.common_data.pagination.current_page,
+        'size': this.common_data.pagination.size,
         'sort': this.sorted_by,
-        'fromDate': 1575133200000,
-        'toDate': this.common_data.tomorrow
+        'fromDate': this.common_data.search.from_date,
+        'toDate': this.common_data.search.to_date
       }
 
       const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.loading = false
       if (response.status === 200) {
         this.loading = false
-
         this.data_table = response.data.content
-        this.load_customer_groups_list()
-      }
-    },
-    async load_customer_groups_list () {
-      if (this.loading) return
-      this.loading = true
-
-      const params = {
-        'page': 0,
-        'size': 100,
-        'sort': this.sorted_by
-      }
-      let url = CUSTOMER_GROUPS_URL + '/search'
-      const response = await this.$services.do_request('get', url, params)
-      this.loading = false
-
-      if (response.status === 200) {
-        this.loading = false
-        let selections = []
-        response.data.content.forEach(item => {
-          selections.push(
-            {'id': item.id, 'name': item.name}
-          )
-        })
-        this.customer_items.push(
-          {
-            label: 'Nhóm',
-            value: '',
-            key: 'groupId',
-            type: 'selection',
-            selections: selections
-          }
-        )
+        this.pagination = {
+          current_page: response.data.pageable.pageNumber,
+          size: response.data.pageable.pageSize,
+          element_total: response.data.totalElements
+        }
+        this.$store.commit('Common/pagination', this.pagination)
       }
     },
     done_request () {
       this.load_list()
     }
   },
+  watch: {
+    'common_data.pagination.size' (val) {
+      this.load_list()
+    },
+    'common_data.pagination.current_page' (val) {
+      this.load_list()
+    }
+  },
   created () {
+    const pagination = {
+      size: 10,
+      element_total: 0,
+      current_page: 0
+    }
+    this.$store.commit('Common/pagination', pagination)
     this.load_list()
   }
 }

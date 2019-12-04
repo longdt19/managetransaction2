@@ -118,14 +118,6 @@
 
     </el-table>
 
-    <div class="" style="text-align: right; margin-top: 30px">
-      <el-pagination
-        :page-size="10"
-        :pager-count="11"
-        layout="prev, pager, next"
-        :total="6">
-      </el-pagination>
-    </div>
   </section>
 </template>
 

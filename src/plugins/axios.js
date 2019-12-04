@@ -44,13 +44,13 @@ class Services {
       // network error
       if (!status || status >= 500) {
         // TODO: handle network error and server error
-        // this.context.$router.push('/e-500')
+        this.context.$router.push('/e-500')
       }
       // authorization issue
       else if (status === 401 || status === 404) {
         // TODO: handle authorization issue
         // this.context.$store.commit('User/signed_out')
-        // window.location.href = process.env.FRONTEND_URL + '/login'
+        window.location.href = process.env.FRONTEND_URL + '/login'
       }
     }
     return response

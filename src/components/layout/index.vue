@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import getDays from '@/utils/day'
+
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import AppMain from './AppMain'
@@ -48,6 +50,10 @@ export default {
     if (!this.$store.getters['Common/token']) {
       this.$router.push('/login')
     }
+  },
+  created () {
+    let day = getDays()
+    this.$store.commit('Common/search', day)
   }
 }
 </script>

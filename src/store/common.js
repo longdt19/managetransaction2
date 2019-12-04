@@ -7,7 +7,15 @@ const INIT_STATE = {
   province_list: [],
   district_list: [],
   ward_list: [],
-  tomorrow: null
+  search: {
+    from_date: null,
+    to_date: null
+  },
+  pagination: {
+    size: 10,
+    element_total: 0,
+    current_page: 0
+  }
 }
 
 export default {
@@ -22,8 +30,17 @@ export default {
     user_info_loaded: (state, value) => {
       state.user_info = value
     },
-    tomorrow_loaded: (state, value) => {
-      state.tomorrow = value
+    search: (state, value) => {
+      state.search = value
+    },
+    pagination: (state, value) => {
+      state.pagination = value
+    },
+    pagination_size: (state, value) => {
+      state.pagination.size = value
+    },
+    pagination_current_page: (state, value) => {
+      state.pagination.current_page = value
     },
     restore: (state) => {
       const s = INIT_STATE
@@ -48,11 +65,14 @@ export default {
   getters: {
     common_data: state => state,
     token: state => state.token,
-    tomorrow: state => state.tomorrow,
+    search: state => state.search,
     user_info: state => state.user_info,
     customer_groups_list: state => state.customer_groups_list,
     province_list: state => state.province_list,
     district_list: state => state.district_list,
-    ward_list: state => state.ward_list
+    ward_list: state => state.ward_list,
+    pagination: state => state.pagination,
+    pagination_size: state => state.pagination,
+    pagination_current_page: state => state.pagination
   }
 }

@@ -2,7 +2,7 @@
 <section>
   <el-row :gutter="50">
     <el-col :span="12"><div class="grid-content bg-purple">
-        <search-component />
+        <search-component @done_request="done_request"/>
     </div></el-col>
 
     <el-col :span="12"><div style="text-align: right;">
@@ -20,19 +20,31 @@
   </el-row>
 
   <div style="margin-top: 30px">
+    <select-perpage-component />
     <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
+    <div class="" style="text-align: right; margin-top: 30px">
+      <pagination-component />
+    </div>
   </div>
 
 </section>
 </template>
 <script>
+import SelectPerpageComponent from '@/components/common/select_perpage'
+import PaginationComponent from '@/components/common/pagination'
 import CreateComponent from '@/components/common/create_or_update'
 import {PRODUCTS_URL, PRODUCTS_TABLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 
 export default {
-  components: {SearchComponent, TableComponent, CreateComponent},
+  components: {
+    SearchComponent,
+    TableComponent,
+    CreateComponent,
+    SelectPerpageComponent,
+    PaginationComponent
+  },
   data () {
     return {
       product_items: [

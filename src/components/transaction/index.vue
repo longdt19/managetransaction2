@@ -2,7 +2,7 @@
 <section>
   <el-row :gutter="50">
     <el-col :span="12"><div class="grid-content bg-purple">
-      <search-component />
+      <search-component @done_request="done_request"/>
     </div></el-col>
 
     <el-col :span="12"><div style="text-align: right;">
@@ -15,20 +15,32 @@
   </el-row>
 
   <div style="margin-top: 30px">
+    <select-perpage-component />
     <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
+    <div class="" style="text-align: right; margin-top: 30px">
+      <pagination-component />
+    </div>
   </div>
 
 </section>
 </template>
 
 <script>
+import SelectPerpageComponent from '@/components/common/select_perpage'
+import PaginationComponent from '@/components/common/pagination'
 import {TRANSACTION_URL} from '@/constants/endpoints'
 import CreateComponent from './create_or_update'
 import TableComponent from './table'
 import SearchComponent from './search'
 
 export default {
-  components: {SearchComponent, TableComponent, CreateComponent},
+  components: {
+    SearchComponent,
+    TableComponent,
+    CreateComponent,
+    SelectPerpageComponent,
+    PaginationComponent
+  },
   data () {
     return {
       transaction_items: [
@@ -58,10 +70,13 @@ export default {
       this.loading = true
 
       const params = {
-        'page': this.pagination.page,
-        'size': this.pagination.size,
-        'sort': this.sorted_by
+        'page': this.common_data.pagination.current_page,
+        'size': this.common_data.pagination.size,
+        'sort': this.sorted_by,
+        'fromDate': this.common_data.search.from_date,
+        'toDate': this.common_data.search.to_date
       }
+      console.log('params', params)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, params)
       this.loading = false
