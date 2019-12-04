@@ -73,10 +73,9 @@ export default {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
         'sort': this.sorted_by,
-        'fromDate': this.common_data.search.from_date,
-        'toDate': this.common_data.search.to_date
+        'fromTime': this.common_data.search.from_date,
+        'toTime': this.common_data.search.to_date
       }
-      console.log('params', params)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, params)
       this.loading = false
