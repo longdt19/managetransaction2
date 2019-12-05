@@ -3,18 +3,19 @@
   <el-button :type="buttonType" :size="buttonSize"
     @click="open()" :icon="buttonIcon">{{buttonTitle}}</el-button>
 
-<el-dialog title="Tạo mới" :visible.sync="dialogFormVisible" style="text-align: left">
+<el-dialog :title="this.scope ? 'Chỉnh sửa' : 'Tạo mới'" :visible.sync="dialogFormVisible" style="text-align: left">
   <el-row :gutter="30">
     <el-col :span="12"><div class="grid-content bg-purple">
-        <el-form>
+        <el-form :model="form" :rules="rules" ref="form1">
 
           <el-form-item label="Thời gian" :label-width="formLabelWidth">
             <el-date-picker
               v-model="form.time"
               type="datetime"
-              default-time="12:00:00"
-              :defaul-value="Date()"
-              value-format="timestamp">
+              :default-time="form.time"
+              value-format="timestamp"
+              format="dd-MM-yyyy HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
 
@@ -22,7 +23,7 @@
             <el-input v-model="form.code"></el-input>
           </el-form-item>
 
-          <el-form-item label="Khách hàng" :label-width="formLabelWidth">
+          <el-form-item label="Khách hàng" :label-width="formLabelWidth" prop="customerId">
             <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
               filterable
               @focus="get_customer_list()"
@@ -55,7 +56,7 @@
     </div></el-col>
 
     <el-col :span="12"><div>
-        <el-form>
+        <el-form :model="form" :rules="rules" ref="form2">
           <el-form-item label="Sản phẩm" :label-width="formLabelWidth">
             <el-select v-model="form.productId" placeholder="Vui lòng chọn"
               filterable
@@ -98,6 +99,9 @@
 <script>
 import {ORDER_TYPE_LIST} from '@/constants'
 import {CUSTOMER_URL, PRODUCTS_URL, ORDERS_URL} from '@/constants/endpoints'
+import {ORDER_RULES} from '@/constants/rules_input'
+
+import getDays from '@/utils/day'
 
 export default {
   props: {
@@ -137,11 +141,14 @@ export default {
         list: []
       },
       loading: false,
-      old_state: {}
+      old_state: {},
+      rules: ORDER_RULES
     }
   },
   methods: {
+    getDays,
     open () {
+      this.form.time = this.getDays().to_date
       if (this.scope) {
         this.form = Object.assign({}, this.scope)
         this.form.productId = this.scope.productName
@@ -168,16 +175,13 @@ export default {
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false
 
-      if (response.status === 200) {
-        this.$message.success('Tạo mới thành công')
+      if (response.status === 200 || response.status === 202) {
+        this.$message.success('Thành công')
+        this.$emit('done_request')
+        this.dialogFormVisible = false
+      } else {
+        this.$message.error('Thất bại')
       }
-      if (response.status === 202) {
-        this.$message.success('Cập nhật thành công')
-      }
-
-      this.loading = false
-      this.$emit('done_request')
-      this.dialogFormVisible = false
     },
     async get_customer_list () {
       if (this.customer.list.length) return
@@ -212,7 +216,7 @@ export default {
       this.product.loading = false
 
       if (response.status === 200) {
-        this.product.list = response.data.content
+        this.product.list = response.data
       }
     }
   }

@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/vi'
 import moment from 'moment'
 import VueNumeric from 'vue-numeric'
+// import VeeValidate from 'vee-validate'
 
 import '@/styles/index.scss' // global css
 
@@ -12,7 +13,6 @@ import App from './App'
 import router from './router'
 import store from './store'
 import axios from './plugins/axios'
-
 import {mapGetters} from 'vuex'
 
 Vue.use(Element, {

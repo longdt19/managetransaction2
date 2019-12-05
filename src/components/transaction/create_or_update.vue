@@ -3,21 +3,22 @@
   <el-button :type="buttonType" :size="buttonSize"
     @click="open()" :icon="buttonIcon">{{buttonTitle}}</el-button>
 
-<el-dialog title="Shipping address" :visible.sync="dialogFormVisible" style="text-align: left">
-  <el-row :gutter="20">
+<el-dialog :title="this.scope ? 'Chỉnh sửa' : 'Tạo mới'" :visible.sync="dialogFormVisible" style="text-align: left">
+  <el-row :gutter="20" style="margin-top: 20px">
     <el-col :span="12"><div>
-      <el-form :model="form">
+      <el-form :model="form" :rules="rules" ref="form1">
         <el-form-item label="Thời gian" :label-width="formLabelWidth">
           <el-date-picker
             v-model="form.time"
             type="datetime"
-            default-time="12:00:00"
-            :defaul-value="Date()"
-            value-format="timestamp">
+            :default-time="form.time"
+            value-format="timestamp"
+            format="dd-MM-yyyy HH:mm:ss"
+            >
           </el-date-picker>
         </el-form-item>
 
-        <el-form-item label="Mã giao dịch" :label-width="formLabelWidth">
+        <el-form-item label="Mã giao dịch" :label-width="formLabelWidth" prop="code">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
 
@@ -25,8 +26,9 @@
           <el-input v-model="form.content"></el-input>
         </el-form-item>
 
-        <el-form-item label="Số tiền" :label-width="formLabelWidth">
-          <el-input v-model="form.money"></el-input>
+        <el-form-item label="Số tiền" :label-width="formLabelWidth" prop="money">
+          <!-- <el-input v-model="form.money"></el-input> -->
+          <vue-numeric separator="," v-model="form.money" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
         <el-form-item label="Phí ngân hàng" :label-width="formLabelWidth">
@@ -47,7 +49,7 @@
     </div></el-col>
 
     <el-col :span="12"><div>
-      <el-form :model="form">
+      <el-form :model="form" :rules="rules" ref="form2">
 
         <el-form-item label="Người giao dịch" :label-width="formLabelWidth">
           <el-input v-model="form.traders"></el-input>
@@ -57,7 +59,7 @@
           <el-input v-model="form.note"></el-input>
         </el-form-item>
 
-        <el-form-item label="Ngân hàng" :label-width="formLabelWidth">
+        <el-form-item label="Ngân hàng" :label-width="formLabelWidth" prop="bankAccountId">
           <el-select v-model="form.bankAccountId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_bank_account_list()"
@@ -72,7 +74,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Khách hàng" :label-width="formLabelWidth">
+        <el-form-item label="Khách hàng" :label-width="formLabelWidth" prop="customerId">
           <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_customer_list()"
@@ -87,7 +89,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Đơn hàng" :label-width="formLabelWidth">
+        <el-form-item label="Đơn hàng" :label-width="formLabelWidth" prop="orderId">
           <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_order_list()"
@@ -107,7 +109,7 @@
   </el-row>
 
   <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="create()" :loading="loading">Xác nhận</el-button>
+    <el-button type="primary" @click="create('form1', 'form2')" :loading="loading">Xác nhận</el-button>
     <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
   </span>
 </el-dialog>
@@ -122,6 +124,8 @@ import {
   TRANSACTION_URL
 } from '@/constants/endpoints'
 import {TRANSACTION_TYPE_LIST} from '@/constants'
+import {TRANSACTION_RULES} from '@/constants/rules_input'
+import getDays from '@/utils/day'
 
 export default {
   props: {
@@ -140,7 +144,7 @@ export default {
         code: null,
         content: null,
         customerId: null,
-        money: null,
+        money: '',
         orderId: null,
         time: null,
         type: 'CHUYEN_TIEN',
@@ -168,11 +172,14 @@ export default {
         list: []
       },
       transaction_type_list: TRANSACTION_TYPE_LIST,
-      old_state: {}
+      old_state: {},
+      rules: TRANSACTION_RULES
     }
   },
   methods: {
+    getDays,
     open () {
+      this.form.time = this.getDays().to_date
       if (this.scope) {
         this.form = Object.assign({}, this.scope)
         this.form.bankAccountId = this.scope.bankName
@@ -182,7 +189,20 @@ export default {
       }
       this.dialogFormVisible = true
     },
-    async create () {
+    async create (form1, form2) {
+      let validation = true
+      this.$refs[form1].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      this.$refs[form2].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      if (!validation) return
+
       if (this.loading) return
       this.loading = true
       let method = 'post'
@@ -201,15 +221,13 @@ export default {
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false
 
-      if (response.status === 200) {
-        this.$message.success('Tạo mới thành công')
+      if (response.status === 200 || response.status === 202) {
+        this.$message.success('Thành công')
+        this.$emit('done_request')
+        this.dialogFormVisible = false
+      } else {
+        this.$message.error('Thất bại')
       }
-      if (response.status === 202) {
-        this.$message.success('Cập nhật thành công')
-      }
-
-      this.$emit('done_request')
-      this.dialogFormVisible = false
     },
     async get_customer_list () {
       if (this.customers.loading) return
@@ -268,6 +286,8 @@ export default {
         this.order.list = response.data.content
       }
     }
+  },
+  created () {
   }
 }
 </script>
