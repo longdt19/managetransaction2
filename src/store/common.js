@@ -15,7 +15,8 @@ const INIT_STATE = {
     size: 10,
     element_total: 0,
     current_page: 0
-  }
+  },
+  rsql: null
 }
 
 export default {
@@ -41,6 +42,9 @@ export default {
     },
     pagination_current_page: (state, value) => {
       state.pagination.current_page = value
+    },
+    rsql: (state, value) => {
+      state.rsql = value
     },
     restore: (state) => {
       const s = INIT_STATE
@@ -73,6 +77,7 @@ export default {
     ward_list: state => state.ward_list,
     pagination: state => state.pagination,
     pagination_size: state => state.pagination,
-    pagination_current_page: state => state.pagination
+    pagination_current_page: state => state.pagination,
+    rsql: state => state.rsql
   }
 }

@@ -89,7 +89,7 @@
       <el-table-column label="Thao tác" header-align="center" width="120px">
         <template slot-scope="scope">
           <el-row>
-            <el-col :span="12" style="text-align: center">
+            <el-col :span="12" style="text-align: center" v-if="scope.row.allowUpdate && scope.row.status === 'MOI_TAO'">
               <update-component
                 :scope="scope.row"
                 button-size="mini"
@@ -98,11 +98,11 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <delete-component
+              <!-- <delete-component
                 :api-url="apiUrl.replace('/search', '')"
                 :scope="scope.row"
                 @done_request="done_request"
-              />
+              /> -->
             </el-col>
           </el-row>
         </template>

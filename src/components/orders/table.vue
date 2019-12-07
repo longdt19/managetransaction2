@@ -93,11 +93,11 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <delete-component
+              <!-- <delete-component
                 :api-url="apiUrl.replace('/search', '')"
                 :scope="scope.row"
                 @done_request="done_request"
-              />
+              /> -->
             </el-col>
           </el-row>
         </template>

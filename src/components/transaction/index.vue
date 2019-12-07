@@ -66,9 +66,10 @@ export default {
       const params = {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
-        'sort': this.sorted_by,
-        'fromTime': this.common_data.search.from_date,
-        'toTime': this.common_data.search.to_date
+        'sort': this.sorted_by
+      }
+      if (this.common_data.rsql) {
+        params['filter'] = this.common_data.rsql
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, params)
@@ -85,6 +86,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('Common/rsql', null)
     this.load_list()
   }
 }
