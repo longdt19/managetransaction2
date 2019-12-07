@@ -61,7 +61,7 @@
       </el-row>
 
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="do_request()" :loading="loading">Xác nhận</el-button>
+        <el-button type="primary" @click="do_request('form1', 'form2')" :loading="loading">Xác nhận</el-button>
         <el-button @click="dialogFormVisible = false" type="danger">Hủy bỏ</el-button>
       </span>
     </el-dialog>

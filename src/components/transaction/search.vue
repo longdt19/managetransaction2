@@ -1,7 +1,7 @@
 <template>
   <section>
     <el-row :gutter="50">
-    <el-col :span="8"><div class="grid-content bg-purple">
+    <el-col :span="3"><div class="grid-content bg-purple">
       <span class="">Từ ngày</span>
       <el-date-picker
         type="date"
@@ -13,7 +13,7 @@
       </el-date-picker>
     </div></el-col>
 
-    <el-col :span="8"><div class="grid-content bg-purple-light">
+    <el-col :span="3"><div class="grid-content bg-purple-light">
       <span class="">Đến ngày</span>
       <el-date-picker
         type="date"
@@ -24,8 +24,40 @@
       >
       </el-date-picker>
     </div></el-col>
+  </el-row>
 
-    <el-col :span="8"><div class="grid-content bg-purple">
+  <el-row :gutter="20" style="margin-top: 20px">
+    <el-col :span="3"><div class="grid-content bg-purple">
+      <span>Người giao dịch</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="3"><div class="grid-content bg-purple">
+      <span>Tên</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="4"><div class="grid-content bg-purple">
+      <span>Nội dung</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="3"><div class="grid-content bg-purple">
+      <span>Mã giao dịch</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="3"><div class="grid-content bg-purple">
+      <span>Ngân hàng</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="2"><div class="grid-content bg-purple">
+      <span>Phê duyệt</span>
+      <el-input />
+    </div></el-col>
+
+    <el-col :span="2"><div class="grid-content bg-purple">
       <span>Tìm kiếm</span>
       <br/>
       <el-button icon="el-icon-search" @click="search()"></el-button>

@@ -1,18 +1,12 @@
 <template>
 <section>
-  <el-row :gutter="50">
-    <el-col :span="12"><div class="grid-content bg-purple">
-      <search-component @done_request="done_request"/>
-    </div></el-col>
-
-    <el-col :span="12"><div style="text-align: right;">
-      <create-component
+  <div style="text-align: right">
+    <create-component
         @done_request="done_request"
         button-title="Tạo mới"
         button-type='primary'/>
-    </div></el-col>
-
-  </el-row>
+  </div>
+  <search-component @done_request="done_request"/>
 
   <div style="margin-top: 30px">
     <select-perpage-component />

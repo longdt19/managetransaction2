@@ -38,7 +38,7 @@
 
       <el-table-column label="Nợ trước" width="100" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.debtBefore}}
+          {{ Number(scope.row.debtBefore).toLocaleString() }}
         </template>
       </el-table-column>
 
@@ -48,25 +48,25 @@
       <el-table-column label="Tồn đầu kỳ" header-align="center">
         <el-table-column label="Nhập" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodImport}}
+            {{ Number(scope.row.previousPeriodImport).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Xuất" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodExport}}
+            {{ Number(scope.row.previousPeriodExport).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Thanh toán" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodPaid}}
+            {{ Number(scope.row.previousPeriodPaid).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Tổng" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodTotal}}
+            {{ Number(scope.row.previousPeriodTotal).toLocaleString()}}
           </template>
         </el-table-column>
       </el-table-column>
@@ -77,25 +77,25 @@
       <el-table-column label="Tồn trong kỳ" header-align="center">
         <el-table-column label="Nhập" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodImport}}
+            {{ Number(scope.row.currentPeriodImport).toLocaleString()}}
           </template>
         </el-table-column>
 
         <el-table-column label="Xuất" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodExport}}
+            {{ Number(scope.row.currentPeriodExport).toLocaleString()}}
           </template>
         </el-table-column>
 
         <el-table-column label="Thanh toán" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodPaid}}
+            {{ Number(scope.row.currentPeriodPaid).toLocaleString()}}
           </template>
         </el-table-column>
 
         <el-table-column label="Tổng" width="80" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodTotal}}
+            {{ Number(scope.row.currentPeriodTotal).toLocaleString()}}
           </template>
         </el-table-column>
       </el-table-column>
@@ -105,7 +105,7 @@
       ********************************************************************** -->
       <el-table-column label="Tổng" width="100" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.total}}
+          {{ Number(scope.row.total).toLocaleString() }}
         </template>
       </el-table-column>
 

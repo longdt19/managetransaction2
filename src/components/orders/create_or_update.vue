@@ -57,7 +57,7 @@
 
     <el-col :span="12"><div>
         <el-form :model="form" :rules="rules" ref="form2">
-          <el-form-item label="Sản phẩm" :label-width="formLabelWidth">
+          <el-form-item label="Sản phẩm" :label-width="formLabelWidth" prop="productId">
             <el-select v-model="form.productId" placeholder="Vui lòng chọn"
               filterable
               @focus="get_product_list()"
@@ -73,15 +73,21 @@
           </el-form-item>
 
           <el-form-item label="Nhập" :label-width="formLabelWidth">
-            <el-input v-model="form.cost"></el-input>
+            <!-- <el-input v-model="form.cost"></el-input> -->
+          <vue-numeric separator="," v-model="form.cost" :value="form.cost" class="vue-numeric-input"></vue-numeric>
+
           </el-form-item>
 
           <el-form-item label="Chiết khấu (%)" :label-width="formLabelWidth">
-            <el-input v-model="form.extracts"></el-input>
+            <!-- <el-input v-model="form.extracts"></el-input> -->
+          <vue-numeric separator="," v-model="form.extracts" :value="form.extracts" class="vue-numeric-input"></vue-numeric>
+
           </el-form-item>
 
           <el-form-item label="Tổng" :label-width="formLabelWidth">
-            <el-input v-model="form.total"></el-input>
+            <!-- <el-input v-model="form.total"></el-input> -->
+          <vue-numeric separator="," :disabled="true" v-model="form.total" :value="(form.cost)*(100+form.extracts)/100" class="vue-numeric-input"></vue-numeric>
+
           </el-form-item>
 
         </el-form>
@@ -89,7 +95,7 @@
 
   </el-row>
   <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="create()" :loading="loading">Xác nhận</el-button>
+    <el-button type="primary" @click="create('form1', 'form2')" :loading="loading">Xác nhận</el-button>
     <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
   </span>
 </el-dialog>
@@ -118,9 +124,9 @@ export default {
         time: null,
         code: null,
         customerId: null,
-        discount: null,
-        extracts: null,
-        total: null,
+        discount: 0,
+        extracts: 0,
+        total: 0,
         note: null,
         productId: null,
         type: 'XUAT'
@@ -157,7 +163,20 @@ export default {
       }
       this.dialogFormVisible = true
     },
-    async create () {
+    async create (form1, form2) {
+      let validation = true
+      this.$refs[form1].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      this.$refs[form2].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      if (!validation) return
+
       if (this.loading) return
       this.loading = true
 
@@ -170,7 +189,7 @@ export default {
         this.form.customerId = this.form.customerId === this.old_state.customerId ? this.scope.customerId : this.form.customerId
         this.form.productId = this.form.productId === this.old_state.productId ? this.scope.productId : this.form.productId
       }
-
+      this.form.total = (this.form.cost) * (100 + this.form.extracts) / 100
       const payload = this.form
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false

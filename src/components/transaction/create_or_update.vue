@@ -28,11 +28,12 @@
 
         <el-form-item label="Số tiền" :label-width="formLabelWidth" prop="money">
           <!-- <el-input v-model="form.money"></el-input> -->
-          <vue-numeric separator="," v-model="form.money" class="vue-numeric-input"></vue-numeric>
+          <vue-numeric separator="," v-model="form.money" :value="form.money" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
         <el-form-item label="Phí ngân hàng" :label-width="formLabelWidth">
-          <el-input v-model="form.bankFee"></el-input>
+          <!-- <el-input v-model="form.bankFee"></el-input> -->
+          <vue-numeric separator="," v-model="form.bankFee" :value="form.bankFee" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
         <el-form-item label="Loại" :label-width="formLabelWidth">
@@ -140,11 +141,11 @@ export default {
       dialogFormVisible: false,
       form: {
         bankAccountId: null,
-        bankFee: null,
+        bankFee: 0,
         code: null,
         content: null,
         customerId: null,
-        money: '',
+        money: 0,
         orderId: null,
         time: null,
         type: 'CHUYEN_TIEN',

@@ -7,12 +7,12 @@
 
   <el-row :gutter="20">
     <el-col :span="12"><div>
-      <el-form>
-        <el-form-item label="Tài khoản" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules" ref="form1">
+        <el-form-item label="Tài khoản" :label-width="formLabelWidth" prop="azAccount">
           <el-input v-model="form.azAccount"></el-input>
         </el-form-item>
 
-        <el-form-item label="Tên" :label-width="formLabelWidth">
+        <el-form-item label="Tên" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
@@ -35,12 +35,12 @@
     </div></el-col>
 
     <el-col :span="12"><div>
-      <el-form>
+      <el-form :model="form" :rules="rules" ref="form2">
         <el-form-item label="Nợ trước" :label-width="formLabelWidth">
           <el-input v-model="form.debtBefore"></el-input>
         </el-form-item>
 
-        <el-form-item label="Nhóm" :label-width="formLabelWidth">
+        <el-form-item label="Nhóm" :label-width="formLabelWidth" prop="groupId">
           <el-select v-model="form.groupId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_customer_groups_list()"
@@ -107,7 +107,7 @@
   </el-row>
 
   <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="create()" :loading="loading">Xác nhận</el-button>
+    <el-button type="primary" @click="create('form1', 'form2')" :loading="loading">Xác nhận</el-button>
     <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
   </span>
 </el-dialog>
@@ -122,6 +122,7 @@ import {
   LOCAL_WARD_URL,
   CUSTOMER_URL
 } from '@/constants/endpoints'
+import {CUSTOMER_RULES} from '@/constants/rules_input'
 
 export default {
   props: {
@@ -170,7 +171,8 @@ export default {
       },
       sorted_by: 'createdAt,desc',
       loading: false,
-      old_state: {}
+      old_state: {},
+      rules: CUSTOMER_RULES
     }
   },
   methods: {
@@ -187,7 +189,20 @@ export default {
       }
       this.dialogFormVisible = true
     },
-    async create () {
+    async create (form1, form2) {
+      let validation = true
+      this.$refs[form1].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      this.$refs[form2].validate((valid) => {
+        if (!valid) {
+          validation = false
+        }
+      })
+      if (!validation) return
+
       if (this.loading) return
       this.loading = true
 

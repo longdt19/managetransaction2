@@ -30,7 +30,7 @@
 
       <el-table-column label="Số dư đầu" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.balances }}
+          {{ Number(scope.row.balances).toLocaleString() }}
         </template>
       </el-table-column>
 
@@ -40,19 +40,19 @@
       <el-table-column label="Tồn đầu kỳ" header-align="center">
         <el-table-column label="Chuyển đến" width="100" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodReceive }}
+            {{ Number(scope.row.previousPeriodReceive).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Chuyển đi" width="100" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodSend }}
+            {{ Number(scope.row.previousPeriodSend).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Phí" width="100" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodFee }}
+            {{ Number(scope.row.previousPeriodFee).toLocaleString() }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -63,19 +63,19 @@
       <el-table-column label="Tồn đầu kỳ" header-align="center">
         <el-table-column label="Chuyển đến" width="100" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodReceive }}
+            {{ Number(scope.row.currentPeriodReceive).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Chuyển đi" width="100" header-align="center">
           <template slot-scope="scope">
-              {{ scope.row.currentPeriodSend }}
+              {{ Number(scope.row.currentPeriodSend).toLocaleString() }}
           </template>
         </el-table-column>
 
         <el-table-column label="Phí" width="100" header-align="center">
           <template slot-scope="scope">
-              {{ scope.row.currentPeriodFee }}
+              {{ Number(scope.row.currentPeriodFee).toLocaleString() }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -85,7 +85,7 @@
       ********************************************************************** -->
       <el-table-column label="Số dư cuối" width="100" header-align="center">
         <template slot-scope="scope">
-            {{ scope.row.finalBalances }}
+            {{ Number(scope.row.finalBalances).toLocaleString() }}
         </template>
       </el-table-column>
 

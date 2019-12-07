@@ -18,3 +18,15 @@ export const ORDER_RULES = {
     {required: true, message: 'Sản phẩm không được để trống', trigger: 'change'}
   ]
 }
+
+export const CUSTOMER_RULES = {
+  groupId: [
+    {required: true, message: 'Nhóm khách hàng không được để trống', trigger: 'change'}
+  ],
+  azAccount: [
+    {required: true, message: 'Tài khoản không được để trống', trigger: 'change'}
+  ],
+  name: [
+    {required: true, message: 'Tên không được để trống', trigger: 'change'}
+  ]
+}
