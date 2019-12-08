@@ -30,4 +30,14 @@ export const LOCAL_WARD_URL = BASE + '/local/ward'
 
 // Transaction
 export const TRANSACTION_URL = BASE + '/transaction/search'
-export const ACCEPTION_URL = BASE + '/confirm'
+export const ACCEPTION_URL = BASE + '/transaction/confirm'
+
+// user for table
+export const USERS_TABLE_URL = BASE + '/user/search'
+export const USERS_URL = BASE + '/user/search'
+
+// change password
+export const PASSWORD_URL = BASE + '/user/change-password'
+
+// roles
+export const ROLE_URL = BASE + '/role/search'

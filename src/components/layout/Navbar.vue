@@ -78,7 +78,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { CHANGE_PASS_URL } from '@/constants/endpoints'
+import { PASSWORD_URL } from '@/constants/endpoints'
 
 export default {
   components: { },
@@ -123,13 +123,13 @@ export default {
       const data = {
         'password': this.old_pass,
         'newPassword': this.new_pass1,
-        'confirmPassword': this.new_pass2
+        'userName': this.common_data.user_info.userName
       }
 
-      const response = await this.$services.do_request('put', CHANGE_PASS_URL, data)
+      const response = await this.$services.do_request('put', PASSWORD_URL, data)
       this.loading = false
 
-      if (response.data.message === 'Success') {
+      if (response.status === 202) {
         this.$message.success('Cập nhật thành công')
         this.dialogChangePass = false
         this.old_pass = ''

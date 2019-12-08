@@ -14,7 +14,7 @@ import Products from '@/components/products'
 import BankAccounts from '@/components/bank_accounts'
 import Orders from '@/components/orders'
 import Users from '@/components/users'
-
+import Roles from '@/components/roles'
 import E500 from '@/components/errors/e500'
 
 Vue.use(Router)
@@ -72,6 +72,11 @@ export default new Router({
           path: 'users',
           name: 'users',
           component: Users
+        },
+        {
+          path: 'roles',
+          name: 'roles',
+          component: Roles
         }
       ]
     }

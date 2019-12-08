@@ -11,6 +11,13 @@
 
       <el-table-column label="Tên user" width="150" header-align="center">
         <template slot-scope="scope">
+          {{ scope.row.userName }}
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Nhóm quyền" width="150" header-align="center">
+        <template slot-scope="scope">
+          {{ scope.row.userRole }}
         </template>
       </el-table-column>
 
@@ -78,7 +85,7 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <update-roles-component />
+              <!-- <update-roles-component /> -->
               <!-- <delete-component
                 :api-url="apiUrl"
                 :scope="scope.row"
@@ -97,18 +104,18 @@
 <script>
 import UpdateComponent from '@/components/common/create_or_update'
 import DeleteComponent from '@/components/common/delete'
-import {BANK_ACCOUNTS_URL} from '@/constants/endpoints'
-import UpdateRolesComponent from './roles'
+import {USERS_URL} from '@/constants/endpoints'
+// import UpdateRolesComponent from './roles'
 
 export default {
-  components: {UpdateComponent, DeleteComponent, UpdateRolesComponent},
+  components: {UpdateComponent, DeleteComponent},
   props: {
     dataTable: {type: Array},
     loading: {type: Boolean, default: false}
   },
   data () {
     return {
-      apiUrl: BANK_ACCOUNTS_URL,
+      apiUrl: USERS_URL,
       user_items: [
         {label: 'Tên tài khoản', value: '', key: 'bankName', type: 'text'},
         {label: 'Mật khẩu', value: '', key: 'userName', type: 'text'}

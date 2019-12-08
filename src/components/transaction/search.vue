@@ -29,27 +29,27 @@
   <el-row :gutter="20" style="margin-top: 20px">
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Người giao dịch</span>
-      <el-input v-model="form.traders" clearable/>
+      <el-input v-model="form.traders.value" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Tên khách hàng</span>
-      <el-input v-model="form.azAccount" clearable/>
+      <el-input v-model="form.azAccount.value" clearable/>
     </div></el-col>
 
     <el-col :span="4"><div class="grid-content bg-purple">
       <span>Nội dung</span>
-      <el-input v-model="form.content" clearable/>
+      <el-input v-model="form.content.value" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Mã giao dịch</span>
-      <el-input v-model="form.code" clearable/>
+      <el-input v-model="form.code.value" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Ngân hàng</span>
-      <el-input v-model="form.bankName" clearable/>
+      <el-input v-model="form.bankName.value" clearable/>
     </div></el-col>
 
     <el-col :span="2"><div class="grid-content bg-purple">
@@ -85,11 +85,12 @@ export default {
         to_date: null
       },
       form: {
-        traders: null,
-        azAccount: null,
-        content: null,
-        code: null,
-        bankName: null
+        traders: {key: 'traders', value: null},
+        azAccount: {key: 'customer.azAccount', value: null},
+        content: {key: 'content', value: null},
+        code: {key: 'code', value: null},
+        bankName: {key: 'bankAccount.bankName', value: null},
+        status: {key: 'status', value: null}
       },
       status: null,
       accept_types: ACCEPT_TYPE_LIST
@@ -99,8 +100,8 @@ export default {
     search () {
       let params = ''
       for (const i in this.form) {
-        if (this.form[i]) {
-          params = params + `${i}=='*${this.form[i]}*';`
+        if (this.form[i].value) {
+          params = params + `${this.form[i].key}=='*${this.form[i].value}*';`
         }
       }
       if (this.date.from_date) {
@@ -119,8 +120,8 @@ export default {
     }
   },
   watch: {
-    ...['date.from_date', 'date.to_date', 'form.traders', 'forms.azAccount',
-      'form.content', 'form.code', 'form.bankName', 'status'
+    ...['date.from_date', 'date.to_date', 'form.traders.value', 'form.azAccount.value',
+      'form.content.value', 'form.code.value', 'form.bankName.value', 'status.value'
     ].reduce((watchers, key) => ({
       ...watchers,
       [key] (newVal, oldVal) {

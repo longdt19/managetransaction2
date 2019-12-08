@@ -13,6 +13,7 @@
       </el-button>
     </div>
     <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
+      ref="multipleTable"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="50" v-if="acception.selected === true">
@@ -33,7 +34,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Tên" width="120" header-align="center">
+      <el-table-column label="Tên khách hàng" width="120" header-align="center">
         <template slot-scope="scope">
           {{ scope.row.azAccount }}
         </template>
@@ -156,7 +157,8 @@ export default {
         count: 0,
         list: [],
         loading: false
-      }
+      },
+      non_acception: []
     }
   },
   methods: {
@@ -171,14 +173,28 @@ export default {
       const payload = {
         'ids': transation_ids
       }
-
       const response = await this.$services.do_request('post', ACCEPTION_URL, payload)
-      this.acception.loading = false
-      console.log(response)
+      if (response.status === 200) {
+        this.acception.loading = false
+        this.acception.selected = false
+        this.acception.list = []
+        let message = 'Duyệt thành công.'
+        if (this.non_acception.length) {
+          message = message + ` Có ${this.non_acception.length} giao dịch không được duyệt do chưa gán đơn hàng`
+        }
+        this.$message.success(message)
+        this.$emit('done_request')
+      }
     },
     handleSelectionChange (val) {
-      this.acception.count = val.length
-      this.acception.list = val
+      if (val.length) {
+        let last = val[val.length - 1]
+        if (!last.orderId) {
+          this.non_acception.push(val.pop(val.indexOf(last), 1))
+        }
+        this.acception.count = val.length
+        this.acception.list = val
+      }
     },
     date_from_timestamp,
     done_request () {

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-// import getDays from '@/utils/day'
+import getDays from '@/utils/day'
 export default {
   data () {
     return {
@@ -45,18 +45,18 @@ export default {
   },
   methods: {
     search () {
-      // const search = {
-      //   from_date: this.from_date,
-      //   to_date: this.to_date
-      // }
-      // this.$store.commit('Common/search', search)
-      // this.$emit('done_request')
+      const search = {
+        from_date: this.from_date,
+        to_date: this.to_date
+      }
+      this.$store.commit('Common/search', search)
+      this.$emit('done_request')
     }
   },
   created () {
-    // let day = getDays()
-    // this.from_date = day.from_date
-    // this.to_date = day.to_date
+    let day = getDays()
+    this.from_date = day.from_date
+    this.to_date = day.to_date
   }
 }
 </script>

@@ -16,7 +16,8 @@ const INIT_STATE = {
     element_total: 0,
     current_page: 0
   },
-  rsql: null
+  rsql: null,
+  user_info: {}
 }
 
 export default {
@@ -28,7 +29,7 @@ export default {
     tokenLoaded: (state, value) => {
       state.token = value
     },
-    user_info_loaded: (state, value) => {
+    user_info: (state, value) => {
       state.user_info = value
     },
     search: (state, value) => {

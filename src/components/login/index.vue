@@ -47,8 +47,8 @@ export default {
       if (response.status === 200) {
         const token = response.data.accessToken
         this.$store.commit('Common/tokenLoaded', token)
-        const userInfo = response.datajwtTokenUser
-        this.$store.commit('Common/user_info_loaded', userInfo)
+        const userInfo = response.data.jwtTokenUser
+        this.$store.commit('Common/user_info', userInfo)
 
         this.$router.push('/')
       } else if (response.data.code === 401) {

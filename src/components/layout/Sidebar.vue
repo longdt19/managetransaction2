@@ -60,12 +60,19 @@
         <span>Ngân hàng</span>
       </el-menu-item>
 
-      <el-menu-item index="users" @click.native="go_to('users')">
+      <!-- <el-menu-item index="users" @click.native="go_to('users')">
         <el-tooltip class="item" effect="dark" content="User" placement="right">
           <img src="../../assets/icon/user.svg" style="width: 25px; margin-right: 10px" />
         </el-tooltip>
         <span>User</span>
       </el-menu-item>
+
+      <el-menu-item index="roles" @click.native="go_to('roles')">
+        <el-tooltip class="item" effect="dark" content="User" placement="right">
+          <img src="../../assets/icon/user.svg" style="width: 25px; margin-right: 10px" />
+        </el-tooltip>
+        <span>Nhóm quyền</span>
+      </el-menu-item> -->
 
     </el-menu>
   </el-scrollbar>

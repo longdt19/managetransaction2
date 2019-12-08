@@ -1,6 +1,5 @@
 <template>
 <section>
-  <h2>User và phân quyền trong các mục</h2>
   <el-row :gutter="50">
     <el-col :span="12"><div class="grid-content bg-purple">
         <!-- <search-component @done_request="done_request"/> -->
@@ -9,9 +8,9 @@
     <el-col><div style="text-align: right;">
         <create-component
           style="text-align: right;"
-          dialog-title="Tạo mới tài khoản"
+          dialog-title="Tạo mới tài khoản ngân hàng"
           :api-url="apiUrl"
-          :items-create="user_items"
+          :items-create="role_items"
           method-request="post"
           @done_request="done_request"
           button-title="Tạo mới"
@@ -35,7 +34,7 @@ import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
 import CreateComponent from '@/components/common/create_or_update'
-import {USERS_URL, USERS_TABLE_URL} from '@/constants/endpoints'
+import {ROLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -49,11 +48,11 @@ export default {
   },
   data () {
     return {
-      user_items: [
-        {label: 'Tên tài khoản', value: '', key: 'bankName', type: 'text'},
-        {label: 'Mật khẩu', value: '', key: 'userName', type: 'text'},
+      role_items: [
+        {label: 'Tên nhóm quyền', value: '', key: 'name', type: 'text'},
+        {label: 'Chú thích', value: '', key: 'description', type: 'text'}
       ],
-      apiUrl: USERS_URL,
+      apiUrl: ROLE_URL.replace('/search', ''),
       loading: false,
       data_table: [],
       sorted_by: 'createdAt,desc'
@@ -67,10 +66,12 @@ export default {
       const params = {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
-        'sort': this.sorted_by
+        'sort': this.sorted_by,
+        'fromTime': this.common_data.search.from_date,
+        'toTime': this.common_data.search.to_date
       }
 
-      const response = await this.$services.do_request('get', USERS_TABLE_URL, params)
+      const response = await this.$services.do_request('get', ROLE_URL, params)
 
       if (response.status === 200) {
         this.loading = false
