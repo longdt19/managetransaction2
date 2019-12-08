@@ -33,6 +33,7 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
+              <roles-component />
               <!-- <delete-component
                 :api-url="apiUrl"
                 :scope="scope.row"
@@ -52,9 +53,9 @@
 import UpdateComponent from '@/components/common/create_or_update'
 import DeleteComponent from '@/components/common/delete'
 import {ROLE_URL} from '@/constants/endpoints'
-
+import RolesComponent from './roles'
 export default {
-  components: {UpdateComponent, DeleteComponent},
+  components: {UpdateComponent, DeleteComponent, RolesComponent},
   props: {
     dataTable: {type: Array},
     loading: {type: Boolean, default: false}

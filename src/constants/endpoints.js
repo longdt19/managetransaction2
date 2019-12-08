@@ -22,6 +22,7 @@ export const CUSTOMER_GROUPS_URL = BASE + '/customer-group'
 
 // Order
 export const ORDERS_URL = BASE + '/order/search'
+export const ORDERS_CUSTOMER_LIST_URL = BASE + '/order'
 
 // Local address
 export const LOCAL_PROVINCE_URL = BASE + '/local/province'
@@ -34,10 +35,13 @@ export const ACCEPTION_URL = BASE + '/transaction/confirm'
 
 // user for table
 export const USERS_TABLE_URL = BASE + '/user/search'
-export const USERS_URL = BASE + '/user/search'
+export const USERS_URL = BASE + '/user'
 
 // change password
 export const PASSWORD_URL = BASE + '/user/change-password'
 
 // roles
 export const ROLE_URL = BASE + '/role/search'
+
+// feature
+export const FEATURE_URL = BASE + '/feature/search'

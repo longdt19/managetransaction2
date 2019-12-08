@@ -58,13 +58,13 @@
       <el-table-column label="Thanh toán" header-align="center">
         <el-table-column label="Có" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ Number(scope.row.owed).toLocaleString()}}
+            {{ scope.row.type === 'XUAT' ? Number(scope.row.owed).toLocaleString() : ''}}
           </template>
         </el-table-column>
 
         <el-table-column label="Nợ" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ Number(scope.row.owed).toLocaleString()}}
+            {{ scope.row.type === 'NHAP' ?Number(scope.row.owed).toLocaleString() : ''}}
           </template>
         </el-table-column>
       </el-table-column>

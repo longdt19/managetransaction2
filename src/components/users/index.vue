@@ -22,7 +22,7 @@
 
   <div style="margin-top: 30px">
     <select-perpage-component />
-    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
+    <table-component :data-table="data_table" :loading="loading" @done_request="done_request" :user-items="user_items"/>
     <div class="" style="text-align: right; margin-top: 30px">
       <pagination-component />
     </div>
@@ -35,7 +35,7 @@ import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
 import CreateComponent from '@/components/common/create_or_update'
-import {USERS_URL, USERS_TABLE_URL} from '@/constants/endpoints'
+import {USERS_URL, USERS_TABLE_URL, ROLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -50,8 +50,9 @@ export default {
   data () {
     return {
       user_items: [
-        {label: 'Tên tài khoản', value: '', key: 'bankName', type: 'text'},
-        {label: 'Mật khẩu', value: '', key: 'userName', type: 'text'},
+        {label: 'Tên tài khoản', value: '', key: 'userName', type: 'text'},
+        {label: 'Mật khẩu', value: '', key: 'password', type: 'text'},
+        {label: 'Email', value: '', key: 'email', type: 'text'}
       ],
       apiUrl: USERS_URL,
       loading: false,
@@ -84,6 +85,33 @@ export default {
         this.$store.commit('Common/pagination', this.pagination)
       }
     },
+    async load_roles_list () {
+      const params = {
+        'page': 0,
+        'size': 100,
+        'sort': 'createdAt,desc',
+      }
+      this.loading = true
+      const response = await this.$services.do_request('get', ROLE_URL, params)
+      if (response.status === 200) {
+        this.loading = false
+
+        // this.data_table = response.data.content
+        let data = {
+          label: 'Nhóm quyền', value: '', key: 'userRole', type: 'selection',
+          selections:[]
+        }
+        response.data.content.forEach(item => {
+          data.selections.push({
+            id: item.name,
+            name: item.name,
+            type: item.name
+          })
+        })
+        this.user_items.push(data)
+        this.loading = false
+      }
+    },
     done_request () {
       this.load_list()
     }
@@ -104,6 +132,7 @@ export default {
     }
     this.$store.commit('Common/pagination', pagination)
     this.load_list()
+    this.load_roles_list()
   }
 }
 </script>

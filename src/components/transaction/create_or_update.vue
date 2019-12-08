@@ -77,6 +77,7 @@
             filterable
             @focus="get_customer_list()"
             :loading="customers.loading"
+            @change="form.orderId = null"
           >
             <el-option
               v-for="b in customers.list"
@@ -87,7 +88,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Đơn hàng" :label-width="formLabelWidth" prop="orderId">
+        <el-form-item label="Đơn hàng" :label-width="formLabelWidth" prop="orderId" v-if="form.customerId">
           <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_order_list()"
@@ -118,7 +119,7 @@
 import {
   BANK_ACCOUNTS_URL,
   CUSTOMER_URL,
-  ORDERS_URL,
+  ORDERS_CUSTOMER_LIST_URL,
   TRANSACTION_URL
 } from '@/constants/endpoints'
 import {TRANSACTION_TYPE_LIST} from '@/constants'
@@ -248,7 +249,6 @@ export default {
     },
     async get_bank_account_list () {
       if (this.bank_accounts.loading) return
-      if (this.bank_accounts.list.length) return
       this.bank_accounts.loading = true
 
       const params = {
@@ -267,16 +267,13 @@ export default {
     },
     async get_order_list () {
       if (this.order.loading) return
-      if (this.order.list.length) return
       this.order.loading = true
 
       const params = {
-        'page': this.pagination.page,
-        'size': this.pagination.size,
-        'sort': this.sorted_by
+        'customerId': this.form.customerId
       }
 
-      const response = await this.$services.do_request('get', ORDERS_URL, params)
+      const response = await this.$services.do_request('get', ORDERS_CUSTOMER_LIST_URL, params)
 
       if (response.status === 200) {
         this.order.loading = false

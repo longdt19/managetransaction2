@@ -75,7 +75,7 @@
               <update-component
                 dialog-title="Cập nhật tài khoản"
                 :api-url="apiUrl"
-                :items-create="user_items"
+                :items-create="userItems"
                 method-request="put"
                 @done_request="done_request"
                 button-size="mini"
@@ -111,15 +111,12 @@ export default {
   components: {UpdateComponent, DeleteComponent},
   props: {
     dataTable: {type: Array},
-    loading: {type: Boolean, default: false}
+    loading: {type: Boolean, default: false},
+    userItems: {types: Array}
   },
   data () {
     return {
-      apiUrl: USERS_URL,
-      user_items: [
-        {label: 'Tên tài khoản', value: '', key: 'bankName', type: 'text'},
-        {label: 'Mật khẩu', value: '', key: 'userName', type: 'text'}
-      ]
+      apiUrl: USERS_URL
     }
   },
   methods: {
