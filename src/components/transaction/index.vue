@@ -9,7 +9,9 @@
   <search-component @done_request="done_request"/>
 
   <div style="margin-top: 30px">
-    <select-perpage-component />
+    <div style="margin-bottom: -56px">
+      <select-perpage-component />
+    </div>
     <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
     <div class="" style="text-align: right; margin-top: 30px">
       <pagination-component />

@@ -1,6 +1,6 @@
 <template>
 <section>
-  <el-menu class="navbar" mode="horizontal" style="margin-bottom: 10px">
+  <el-menu class="navbar" mode="horizontal" style="margin-bottom: 10px; margin-left: 30px">
     <el-row>
       <el-col :span="12"><div class="grid-content bg-purple">
         <el-button @click="toggleSideBar" round size="small">

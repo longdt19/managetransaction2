@@ -13,6 +13,7 @@ import CustomerGroups from '@/components/customer_groups'
 import Products from '@/components/products'
 import BankAccounts from '@/components/bank_accounts'
 import Orders from '@/components/orders'
+import Users from '@/components/users'
 
 import E500 from '@/components/errors/e500'
 
@@ -66,6 +67,11 @@ export default new Router({
           path: 'orders',
           name: 'orders',
           component: Orders
+        },
+        {
+          path: 'users',
+          name: 'users',
+          component: Users
         }
       ]
     }

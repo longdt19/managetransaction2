@@ -29,33 +29,40 @@
   <el-row :gutter="20" style="margin-top: 20px">
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Người giao dịch</span>
-      <el-input v-model="form.traders"/>
+      <el-input v-model="form.traders" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Tên khách hàng</span>
-      <el-input v-model="form.azAccount"/>
+      <el-input v-model="form.azAccount" clearable/>
     </div></el-col>
 
     <el-col :span="4"><div class="grid-content bg-purple">
       <span>Nội dung</span>
-      <el-input v-model="form.content"/>
+      <el-input v-model="form.content" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Mã giao dịch</span>
-      <el-input v-model="form.code"/>
+      <el-input v-model="form.code" clearable/>
     </div></el-col>
 
     <el-col :span="3"><div class="grid-content bg-purple">
       <span>Ngân hàng</span>
-      <el-input v-model="form.bankName"/>
+      <el-input v-model="form.bankName" clearable/>
     </div></el-col>
 
-    <!-- <el-col :span="2"><div class="grid-content bg-purple">
+    <el-col :span="2"><div class="grid-content bg-purple">
       <span>Phê duyệt</span>
-      <el-input />
-    </div></el-col> -->
+      <el-select v-model="status">
+        <el-option
+          v-for="item in accept_types"
+          :key="item.tooltip"
+          :label="item.tooltip"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div></el-col>
 
     <el-col :span="2"><div class="grid-content bg-purple">
       <span>Tìm kiếm</span>
@@ -68,6 +75,8 @@
 
 <script>
 import getDays from '@/utils/day'
+import {ACCEPT_TYPE_LIST} from '@/constants'
+
 export default {
   data () {
     return {
@@ -81,7 +90,9 @@ export default {
         content: null,
         code: null,
         bankName: null
-      }
+      },
+      status: null,
+      accept_types: ACCEPT_TYPE_LIST
     }
   },
   methods: {
@@ -98,11 +109,24 @@ export default {
       if (this.date.to_date) {
         params = params + `time<=${this.date.to_date};`
       }
+      if (this.status) {
+        params = params + `status==${this.status};`
+      }
       params = params.replace(/;$/, '')
-
+      console.log('params', params)
       this.$store.commit('Common/rsql', params)
       this.$emit('done_request')
     }
+  },
+  watch: {
+    ...['date.from_date', 'date.to_date', 'form.traders', 'forms.azAccount',
+      'form.content', 'form.code', 'form.bankName', 'status'
+    ].reduce((watchers, key) => ({
+      ...watchers,
+      [key] (newVal, oldVal) {
+        if (!newVal) this.search()
+      }
+    }), {})
   },
   created () {
     let day = getDays()

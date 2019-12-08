@@ -30,3 +30,4 @@ export const LOCAL_WARD_URL = BASE + '/local/ward'
 
 // Transaction
 export const TRANSACTION_URL = BASE + '/transaction/search'
+export const ACCEPTION_URL = BASE + '/confirm'

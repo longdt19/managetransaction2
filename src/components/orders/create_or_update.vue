@@ -86,7 +86,7 @@
 
           <el-form-item label="Tổng" :label-width="formLabelWidth">
             <!-- <el-input v-model="form.total"></el-input> -->
-          <vue-numeric separator="," :disabled="true" v-model="form.total" :value="(form.cost)*(100+form.extracts)/100" class="vue-numeric-input"></vue-numeric>
+          <vue-numeric separator="," :disabled="true" v-model="form.total" :value="(form.cost)*(100-form.extracts)/100" class="vue-numeric-input"></vue-numeric>
 
           </el-form-item>
 
@@ -189,7 +189,7 @@ export default {
         this.form.customerId = this.form.customerId === this.old_state.customerId ? this.scope.customerId : this.form.customerId
         this.form.productId = this.form.productId === this.old_state.productId ? this.scope.productId : this.form.productId
       }
-      this.form.total = (this.form.cost) * (100 + this.form.extracts) / 100
+      this.form.total = (this.form.cost) * (100 - this.form.extracts) / 100
       const payload = this.form
       const response = await this.$services.do_request(method, url, payload)
       this.loading = false

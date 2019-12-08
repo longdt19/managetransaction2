@@ -13,6 +13,6 @@ export const TRANSACTION_TYPE_LIST = [
 ]
 
 export const ACCEPT_TYPE_LIST = [
-  {value: 'MOI_TAO', type: '', tooltip: 'Mới tạo'},
-  {value: 'DA_DUYET', type: 'success', tooltip: 'Đã duyệt'}
+  {value: 'MOI_TAO', type: '', tooltip: 'Mới tạo', display: 'Mới'},
+  {value: 'DA_DUYET', type: 'success', tooltip: 'Đã duyệt', display: 'Duyệt'}
 ]

@@ -60,7 +60,7 @@
       <!-- ********************************************************************
       **********************   Tồn trong kỳ    ********************************
       ********************************************************************** -->
-      <el-table-column label="Tồn đầu kỳ" header-align="center">
+      <el-table-column label="Tồn trong kỳ" header-align="center">
         <el-table-column label="Chuyển đến" width="100" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.currentPeriodReceive).toLocaleString() }}

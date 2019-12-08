@@ -30,7 +30,7 @@
 
       <el-table-column label="Loại" width="80" header-align="center" align="center">
         <template slot-scope="scope">
-          <el-tag :type="get_order_type(scope.row.type).type">{{ scope.row.type}}</el-tag>
+          <el-tag :type="get_order_type(scope.row.type).type">{{ get_order_type(scope.row.type).key}}</el-tag>
         </template>
       </el-table-column>
 

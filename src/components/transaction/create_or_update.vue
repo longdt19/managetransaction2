@@ -28,21 +28,18 @@
 
         <el-form-item label="Số tiền" :label-width="formLabelWidth" prop="money">
           <!-- <el-input v-model="form.money"></el-input> -->
-          <vue-numeric separator="," v-model="form.money" :value="form.money" class="vue-numeric-input"></vue-numeric>
+          <vue-numeric separator="," v-model="form.money" value="0" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
         <el-form-item label="Phí ngân hàng" :label-width="formLabelWidth">
           <!-- <el-input v-model="form.bankFee"></el-input> -->
-          <vue-numeric separator="," v-model="form.bankFee" :value="form.bankFee" class="vue-numeric-input"></vue-numeric>
+          <vue-numeric separator="," v-model="form.bankFee" value="0" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
         <el-form-item label="Loại" :label-width="formLabelWidth">
           <el-radio-group v-model="form.type">
-            <el-radio
-              v-for="(type, index) in transaction_type_list"
-              v-bind:key="index"
-              :label="type.value"
-              :value="type.key"/>
+            <el-radio label="CHUYEN_TIEN">Chuyển tiền</el-radio>
+            <el-radio label="NHAN_TIEN">Nhận tiền</el-radio>
           </el-radio-group>
         </el-form-item>
 

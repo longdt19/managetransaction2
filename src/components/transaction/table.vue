@@ -1,6 +1,23 @@
 <template>
   <section>
-    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
+    <div style="margin-bottom: 20px">
+      <el-button @click="acception.selected = true" v-if="acception.selected === false">Tiến hành duyệt đơn</el-button>
+      <el-button type="danger" @click="acception.selected = false" v-if="acception.selected === true" icon="el-icon-circle-close">Hoàn tác</el-button>
+      <el-button type="success"
+        icon="el-icon-check"
+        v-if="acception.selected === true"
+        @click="accept_transaction"
+        :loading="acception.loading"
+      >
+      Phê duyệt ({{acception.count}})
+      </el-button>
+    </div>
+    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="50" v-if="acception.selected === true">
+      </el-table-column>
+
       <el-table-column type="index" label="STT" width="50">
       </el-table-column>
 
@@ -78,10 +95,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Duyệt" width="70" header-align="center" align="center">
+      <el-table-column label="Trạng thái" width="70" header-align="center" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="get_accept_type(scope.row.status).tooltip" placement="left">
-            <el-button :type="get_accept_type(scope.row.status).type" icon="el-icon-check" circle size="mini"></el-button>
+            <el-button :type="get_accept_type(scope.row.status).type" circle size="mini">
+              {{ get_accept_type(scope.row.status).display }}
+            </el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -98,6 +117,7 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
+              <el-button  icon="el-icon-message" size="mini" />
               <!-- <delete-component
                 :api-url="apiUrl.replace('/search', '')"
                 :scope="scope.row"
@@ -118,7 +138,7 @@ import {
   ACCEPT_TYPE_LIST
 } from '@/constants'
 import date_from_timestamp from '@/utils/date_from_timestamp'
-import {TRANSACTION_URL} from '@/constants/endpoints'
+import {TRANSACTION_URL, ACCEPTION_URL} from '@/constants/endpoints'
 import DeleteComponent from '@/components/common/delete'
 import UpdateComponent from './create_or_update'
 
@@ -130,10 +150,36 @@ export default {
   },
   data () {
     return {
-      apiUrl: TRANSACTION_URL
+      apiUrl: TRANSACTION_URL,
+      acception: {
+        selected: false,
+        count: 0,
+        list: [],
+        loading: false
+      }
     }
   },
   methods: {
+    async accept_transaction () {
+      if (this.acception.loading) return
+      this.acception.loading = true
+
+      let transation_ids = []
+      this.acception.list.forEach(item => {
+        transation_ids.push(item.id)
+      })
+      const payload = {
+        'ids': transation_ids
+      }
+
+      const response = await this.$services.do_request('post', ACCEPTION_URL, payload)
+      this.acception.loading = false
+      console.log(response)
+    },
+    handleSelectionChange (val) {
+      this.acception.count = val.length
+      this.acception.list = val
+    },
     date_from_timestamp,
     done_request () {
       this.$emit('done_request')
