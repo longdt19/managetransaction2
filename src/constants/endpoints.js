@@ -41,7 +41,9 @@ export const USERS_URL = BASE + '/user'
 export const PASSWORD_URL = BASE + '/user/change-password'
 
 // roles
-export const ROLE_URL = BASE + '/role/search'
+export const ROLE_TABLE_URL = BASE + '/role/search'
+export const ROLE_URL = BASE + '/role'
+export const ROLE_FIND_FIELD_URL = BASE + '/role/find-one-by-field'
 
 // feature
 export const FEATURE_URL = BASE + '/feature/search'

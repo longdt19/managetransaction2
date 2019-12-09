@@ -1,6 +1,6 @@
 <template>
-<section>
-  <div style="text-align: right">
+<section v-if="navigation">
+  <div style="text-align: right" :style="navigation.includes('CREATE') ? '' : 'display: none'">
     <create-component
         @done_request="done_request"
         button-title="Tạo mới"
@@ -57,7 +57,8 @@ export default {
         page: 0,
         size: 100
       },
-      sorted_by: 'createdAt,desc'
+      sorted_by: 'createdAt,desc',
+      navigation: []
     }
   },
   methods: {
@@ -81,6 +82,12 @@ export default {
         this.loading = false
 
         this.data_table = response.data.content
+        this.pagination = {
+          current_page: response.data.pageable.pageNumber,
+          size: response.data.pageable.pageSize,
+          element_total: response.data.totalElements
+        }
+        this.$store.commit('Common/pagination', this.pagination)
       }
     },
     done_request () {
@@ -88,6 +95,17 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.TRANSACTION
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
+    const pagination = {
+      size: 10,
+      element_total: 0,
+      current_page: 0
+    }
+    this.$store.commit('Common/pagination', pagination)
     this.$store.commit('Common/rsql', null)
     this.load_list()
   }

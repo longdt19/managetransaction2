@@ -1,7 +1,10 @@
 <template>
   <section>
     <div style="margin-bottom: 20px">
-      <el-button @click="acception.selected = true" v-if="acception.selected === false">Tiến hành duyệt đơn</el-button>
+      <el-button
+        @click="acception.selected = true" v-if="acception.selected === false"
+        :disabled="!this.common_data.navigation.TRANSACTION.includes('CONFIRM')"
+      >Tiến hành duyệt đơn</el-button>
       <el-button type="danger" @click="acception.selected = false" v-if="acception.selected === true" icon="el-icon-circle-close">Hoàn tác</el-button>
       <el-button type="success"
         icon="el-icon-check"
@@ -22,7 +25,7 @@
       <el-table-column type="index" label="STT" width="50">
       </el-table-column>
 
-      <el-table-column label="Ngày" width="90" header-align="center">
+      <el-table-column label="Ngày" width="100" header-align="center">
         <template slot-scope="scope">
           {{ date_from_timestamp(scope.row.time)}}
         </template>
@@ -52,15 +55,17 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Ngân hàng" width="120" header-align="center">
+      <el-table-column label="Ngân hàng" width="150" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.bankName }}
+          <el-tooltip class="item" effect="dark" :content="`Số dư trước: ${Number(scope.row.beforeBalance).toLocaleString()} - Số dư sau: ${Number(scope.row.afterBalance).toLocaleString()}`" placement="top-start">
+            <el-button>{{ scope.row.bankName }}</el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
 
       <el-table-column label="Loại" width="80" header-align="center" align="center">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="get_transaction_type(scope.row.type).tooltip" placement="left">
+          <el-tooltip class="item" effect="dark" :content="get_transaction_type(scope.row.type).tooltip" placement="right">
             <el-tag :type="get_transaction_type(scope.row.type).type">{{ get_transaction_type(scope.row.type).key }}</el-tag>
           </el-tooltip>
         </template>
@@ -109,21 +114,24 @@
       <el-table-column label="Thao tác" header-align="center" width="120px">
         <template slot-scope="scope">
           <el-row>
-            <el-col :span="12" style="text-align: center" v-if="scope.row.allowUpdate && scope.row.status === 'MOI_TAO'">
+            <el-col :span="12" style="text-align: center"
+              v-if="scope.row.allowUpdate && scope.row.status === 'MOI_TAO'"
+            >
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 :scope="scope.row"
                 button-size="mini"
                 button-icon="el-icon-edit"
                 @done_request="done_request"
               />
             </el-col>
-            <el-col :span="12" style="text-align: center">
-              <el-button  icon="el-icon-message" size="mini" />
-              <!-- <delete-component
+            <el-col :span="12" style="text-align: center" v-if="navigation.includes('DELETE')">
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl.replace('/search', '')"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -158,7 +166,8 @@ export default {
         list: [],
         loading: false
       },
-      non_acception: []
+      non_acception: [],
+      navigation: []
     }
   },
   methods: {
@@ -215,6 +224,9 @@ export default {
       })
       return type
     }
+  },
+  created () {
+    this.navigation = this.common_data.navigation.TRANSACTION
   }
 }
 </script>

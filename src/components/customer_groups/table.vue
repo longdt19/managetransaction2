@@ -21,6 +21,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+              v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật tài khoản ngân hàng"
                 :api-url="apiUrl"
                 :items-create="customer_items"
@@ -33,11 +34,12 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <!-- <delete-component
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -72,11 +74,13 @@ export default {
         {label: 'Tên nhóm', value: '', key: 'name', type: 'text'},
         {label: 'Ghi chú', value: '', key: 'description', type: 'text'}
       ],
-      apiUrl: CUSTOMER_GROUPS_URL
+      apiUrl: CUSTOMER_GROUPS_URL,
+      navigation: []
     }
   },
   methods: {
     done_request () {
+      this.navigation = this.common_data.navigation.CUSTOMER_GROUP
       this.$emit('done_request')
     }
   }

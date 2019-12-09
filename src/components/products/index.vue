@@ -5,7 +5,7 @@
         <search-component @done_request="done_request"/>
     </div></el-col>
 
-    <el-col :span="12"><div style="text-align: right;">
+    <el-col :span="12"><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
         <create-component
           style="text-align: right;"
           dialog-title="Tạo mới sản phẩm"
@@ -60,7 +60,8 @@ export default {
         size: 100
       },
       sorted_by: 'createdAt,desc',
-      data_table: []
+      data_table: [],
+      navigation: []
     }
   },
   methods: {
@@ -89,6 +90,11 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.PRODUCT
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
     this.load_list()
   }
 }

@@ -17,7 +17,17 @@ const INIT_STATE = {
     current_page: 0
   },
   rsql: null,
-  user_info: {}
+  user_info: {},
+  navigation: {
+    transaction: {},
+    order: {},
+    customer: {},
+    customer_group: {},
+    bank_account: {},
+    user: {},
+    role: {}
+  },
+  role: {}
 }
 
 export default {
@@ -46,6 +56,12 @@ export default {
     },
     rsql: (state, value) => {
       state.rsql = value
+    },
+    navigation: (state, value) => {
+      state.navigation = value
+    },
+    role: (state, value) => {
+      state.role = value
     },
     restore: (state) => {
       const s = INIT_STATE
@@ -79,6 +95,8 @@ export default {
     pagination: state => state.pagination,
     pagination_size: state => state.pagination,
     pagination_current_page: state => state.pagination,
-    rsql: state => state.rsql
+    rsql: state => state.rsql,
+    navigation: state => state.navigation,
+    role: state => state.role
   }
 }

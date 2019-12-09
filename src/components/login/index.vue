@@ -22,14 +22,15 @@
 </template>
 
 <script>
-import { LOGIN_URL } from '@/constants/endpoints'
+import { LOGIN_URL, ROLE_FIND_FIELD_URL } from '@/constants/endpoints'
 
 export default {
   data () {
     return {
       username: 'admin',
       password: 'admin',
-      loading: false
+      loading: false,
+      userRole: null
     }
   },
   methods: {
@@ -50,11 +51,40 @@ export default {
         const userInfo = response.data.jwtTokenUser
         this.$store.commit('Common/user_info', userInfo)
 
-        this.$router.push('/')
+        // get role
+        this.userRole = userInfo.userRole
+        this.get_role()
       } else if (response.data.code === 401) {
         this.$message.error('Tài khoản không đúng')
       } else {
         this.$message.error('Lỗi hệ thống! Đăng nhập thất bại')
+      }
+    },
+    async get_role () {
+      this.loading = true
+
+      const params = {
+        field: 'name',
+        value: this.userRole
+      }
+      const response = await this.$services.do_request('get', ROLE_FIND_FIELD_URL, params)
+      this.loading = false
+      if (response.status === 200) {
+        let data = response.data
+        this.$store.commit('Common/role', data)
+
+        if (data.features) {
+          let result = {}
+          data.features.forEach(item => {
+            result[item.screenId] = []
+          })
+          data.features.forEach(item => {
+            result[item.screenId].push(item.action)
+          })
+          this.$store.commit('Common/navigation', result)
+        }
+
+        this.$router.push('/')
       }
     }
   },

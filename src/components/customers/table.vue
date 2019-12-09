@@ -146,6 +146,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 :scope="scope.row"
                 button-size="mini"
                 button-icon="el-icon-edit"
@@ -153,11 +154,12 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <!-- <delete-component
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -189,7 +191,8 @@ export default {
         {label: 'Tỉnh', value: '', key: 'province', type: 'text'},
         {label: 'Ghi chú', value: '', key: 'note', type: 'text'}
       ],
-      apiUrl: CUSTOMER_URL
+      apiUrl: CUSTOMER_URL,
+      navigation: []
     }
   },
   methods: {
@@ -225,6 +228,7 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.CUSTOMER
     this.load_customer_groups_list()
   }
 }

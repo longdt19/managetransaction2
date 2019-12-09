@@ -5,7 +5,7 @@
         <!-- <search-component @done_request="done_request"/> -->
     </div></el-col>
 
-    <el-col><div style="text-align: right;">
+    <el-col><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
         <create-component
           style="text-align: right;"
           dialog-title="Tạo mới tài khoản ngân hàng"
@@ -34,7 +34,7 @@ import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
 import CreateComponent from '@/components/common/create_or_update'
-import {ROLE_URL, FEATURE_URL} from '@/constants/endpoints'
+import {ROLE_TABLE_URL, FEATURE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -52,10 +52,11 @@ export default {
         {label: 'Tên nhóm quyền', value: '', key: 'name', type: 'text'},
         {label: 'Chú thích', value: '', key: 'description', type: 'text'}
       ],
-      apiUrl: ROLE_URL.replace('/search', ''),
+      apiUrl: ROLE_TABLE_URL.replace('/search', ''),
       loading: false,
       data_table: [],
-      sorted_by: 'createdAt,desc'
+      sorted_by: 'createdAt,desc',
+      navigation: []
     }
   },
   methods: {
@@ -100,7 +101,7 @@ export default {
         'toTime': this.common_data.search.to_date
       }
 
-      const response = await this.$services.do_request('get', ROLE_URL, params)
+      const response = await this.$services.do_request('get', ROLE_TABLE_URL, params)
 
       if (response.status === 200) {
         this.loading = false
@@ -127,6 +128,11 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.ROLE
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
     const pagination = {
       size: 10,
       element_total: 0,

@@ -5,12 +5,15 @@
         <search-component @done_request="done_request"/>
     </div></el-col>
 
-    <el-col :span="12"><div style="text-align: right;">
-      <create-component
-        @done_request="done_request"
-        button-title="Tạo mới"
-        button-type='primary'
-      />
+    <el-col :span="12"><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
+      <div class="" style="display: -webkit-inline-box">
+        <create-component
+          @done_request="done_request"
+          button-title="Tạo mới"
+          button-type='primary'
+        />
+        <!-- <el-button style="margin-left: 10px">Xuất Excel</el-button> -->
+      </div>
     </div></el-col>
 
   </el-row>
@@ -50,7 +53,8 @@ export default {
         page: 0,
         size: 100
       },
-      sorted_by: 'createdAt,desc'
+      sorted_by: 'createdAt,desc',
+      navigation: []
     }
   },
   methods: {
@@ -93,6 +97,11 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.ORDER
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
     const pagination = {
       size: 10,
       element_total: 0,

@@ -101,6 +101,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật tài khoản ngân hàng"
                 :api-url="apiUrl"
                 :items-create="product_items"
@@ -113,11 +114,12 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <!-- <delete-component
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -146,7 +148,8 @@ export default {
         {label: 'Mô tả', value: '', key: 'inventory', type: 'text'},
         {label: 'Tồn', value: '', key: 'name', type: 'text'}
       ],
-      apiUrl: PRODUCTS_URL
+      apiUrl: PRODUCTS_URL,
+      navigation: []
     }
   },
   methods: {
@@ -155,6 +158,7 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.PRODUCT
     // this.load_list()
   }
 }

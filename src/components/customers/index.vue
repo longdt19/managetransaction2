@@ -5,7 +5,7 @@
         <search-component @done_request="done_request"/>
     </div></el-col>
 
-    <el-col :span="12"><div style="text-align: right;">
+    <el-col :span="12"><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
         <create-component
           @done_request="done_request"
           button-title="Tạo mới"
@@ -50,7 +50,8 @@ export default {
       loading: false,
       data_table: [],
       sorted_by: 'createdAt,desc',
-      customer_groups_list: []
+      customer_groups_list: [],
+      navigation: []
     }
   },
   methods: {
@@ -92,6 +93,11 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.CUSTOMER
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
     const pagination = {
       size: 10,
       element_total: 0,

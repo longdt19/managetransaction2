@@ -21,6 +21,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật"
                 :api-url="apiUrl"
                 :items-create="role_items"
@@ -33,12 +34,9 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <roles-component />
-              <!-- <delete-component
-                :api-url="apiUrl"
-                :scope="scope.row"
-                @done_request="done_request"
-              /> -->
+              <roles-component
+                v-if="navigation.includes('UPDATE')"
+                :scope="scope.row"/>
             </el-col>
           </el-row>
         </template>
@@ -52,7 +50,7 @@
 <script>
 import UpdateComponent from '@/components/common/create_or_update'
 import DeleteComponent from '@/components/common/delete'
-import {ROLE_URL} from '@/constants/endpoints'
+import {ROLE_TABLE_URL} from '@/constants/endpoints'
 import RolesComponent from './roles'
 export default {
   components: {UpdateComponent, DeleteComponent, RolesComponent},
@@ -62,17 +60,21 @@ export default {
   },
   data () {
     return {
-      apiUrl: ROLE_URL.replace('/search', ''),
+      apiUrl: ROLE_TABLE_URL.replace('/search', ''),
       role_items: [
         {label: 'Tên nhóm quyền', value: '', key: 'name', type: 'text'},
         {label: 'Chú thích', value: '', key: 'description', type: 'text'}
-      ]
+      ],
+      navigation: []
     }
   },
   methods: {
     done_request () {
       this.$emit('done_request')
     }
+  },
+  created () {
+    this.navigation = this.common_data.navigation.ROLE
   }
 }
 </script>

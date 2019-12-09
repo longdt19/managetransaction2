@@ -94,6 +94,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật tài khoản ngân hàng"
                 :api-url="apiUrl"
                 :items-create="bank_items"
@@ -106,11 +107,12 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <!-- <delete-component
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -141,13 +143,17 @@ export default {
         {label: 'Số tài khoản', value: '', key: 'accountNumber', type: 'text'},
         {label: 'Chi nhánh', value: '', key: 'branch', type: 'text'},
         {label: 'Số dư đầu', value: '', key: 'balances', type: 'text'}
-      ]
+      ],
+      navigation: []
     }
   },
   methods: {
     done_request () {
       this.$emit('done_request')
     }
+  },
+  created () {
+    this.navigation = this.common_data.navigation.BANK_ACCOUNT
   }
 }
 </script>

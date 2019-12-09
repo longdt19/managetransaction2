@@ -16,9 +16,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="User" width="180" header-align="center">
+      <el-table-column label="Khách hàng" width="180" header-align="center" align="center">
           <template slot-scope="scope">
-            {{ scope.row.azAccount}}
+            <el-tooltip class="item" effect="dark" :content="`Nợ trước: ${Number(scope.row.beforeDebt).toLocaleString()} - Nợ sau: ${Number(scope.row.afterDebt).toLocaleString()}`" placement="top-start">
+              <el-button>{{ scope.row.azAccount}}</el-button>
+            </el-tooltip>
         </template>
       </el-table-column>
 
@@ -58,20 +60,30 @@
       <el-table-column label="Thanh toán" header-align="center">
         <el-table-column label="Có" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.type === 'XUAT' ? Number(scope.row.owed).toLocaleString() : ''}}
+            {{ scope.row.type === 'XUAT' ? Number(scope.row.paid).toLocaleString() : ''}}
           </template>
         </el-table-column>
 
         <el-table-column label="Nợ" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.type === 'NHAP' ?Number(scope.row.owed).toLocaleString() : ''}}
+            {{ scope.row.type === 'NHAP' ? Number(scope.row.paid).toLocaleString() : ''}}
           </template>
         </el-table-column>
       </el-table-column>
 
       <el-table-column label="Hình thức" width="120" header-align="center">
         <template slot-scope="scope" v-if="scope.row.transactions.length">
-          {{ scope.row.transactions[0]['bankName'] }}
+          <p v-if="scope.row.transactions.length === 1">{{ scope.row.transactions[0]['bankName'] }}</p>
+          <el-dropdown v-else>
+            <el-button type="text">
+              {{ scope.row.transactions[0]['bankName'] }}
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(item, index) in scope.row.transactions" v-bind:key="index" >
+                {{index+1}}. {{item.bankName}} - {{Number(item.money).toLocaleString()}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
 
@@ -86,6 +98,7 @@
           <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
+                v-if="navigation.includes('UPDATE')"
                 @done_request="done_request"
                 :scope="scope.row"
                 button-size="mini"
@@ -93,11 +106,12 @@
               />
             </el-col>
             <el-col :span="12" style="text-align: center">
-              <!-- <delete-component
+              <delete-component
+                v-if="navigation.includes('DELETE')"
                 :api-url="apiUrl.replace('/search', '')"
                 :scope="scope.row"
                 @done_request="done_request"
-              /> -->
+              />
             </el-col>
           </el-row>
         </template>
@@ -123,7 +137,8 @@ export default {
   },
   data () {
     return {
-      apiUrl: ORDERS_URL
+      apiUrl: ORDERS_URL,
+      navigation: []
     }
   },
   methods: {
@@ -140,6 +155,9 @@ export default {
       })
       return type
     }
+  },
+  created () {
+    this.navigation = this.common_data.navigation.ORDER
   }
 }
 </script>

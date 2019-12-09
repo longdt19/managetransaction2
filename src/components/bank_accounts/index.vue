@@ -5,7 +5,7 @@
         <search-component @done_request="done_request"/>
     </div></el-col>
 
-    <el-col :span="12"><div style="text-align: right;">
+    <el-col :span="12"><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
         <create-component
           style="text-align: right;"
           dialog-title="Tạo mới tài khoản ngân hàng"
@@ -58,7 +58,8 @@ export default {
       apiUrl: BANK_ACCOUNTS_URL,
       loading: false,
       data_table: [],
-      sorted_by: 'createdAt,desc'
+      sorted_by: 'createdAt,desc',
+      navigation: []
     }
   },
   methods: {
@@ -101,6 +102,11 @@ export default {
     }
   },
   created () {
+    this.navigation = this.common_data.navigation.BANK_ACCOUNT
+    if (!this.navigation) {
+      this.$message.error('Bạn không có quyền hạn cho chức năng này')
+      return
+    }
     const pagination = {
       size: 10,
       element_total: 0,
