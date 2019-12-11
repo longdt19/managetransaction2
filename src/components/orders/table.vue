@@ -50,6 +50,7 @@
 
       <el-table-column label="Giảm giá" width="100" header-align="center">
         <template slot-scope="scope">
+          {{ Number(scope.row.promotion).toLocaleString()}}
         </template>
       </el-table-column>
 
