@@ -48,6 +48,11 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="Giảm giá" width="100" header-align="center">
+        <template slot-scope="scope">
+        </template>
+      </el-table-column>
+
       <el-table-column label="Tổng" width="120" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.total).toLocaleString()}}

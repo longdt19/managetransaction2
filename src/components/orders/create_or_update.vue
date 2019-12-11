@@ -73,21 +73,19 @@
           </el-form-item>
 
           <el-form-item label="Nhập" :label-width="formLabelWidth">
-            <!-- <el-input v-model="form.cost"></el-input> -->
-          <vue-numeric separator="," v-model="form.cost" :value="form.cost" class="vue-numeric-input"></vue-numeric>
-
+            <vue-numeric separator="," v-model="form.cost" :value="form.cost" class="vue-numeric-input"></vue-numeric>
           </el-form-item>
 
           <el-form-item label="Chiết khấu (%)" :label-width="formLabelWidth">
-            <!-- <el-input v-model="form.extracts"></el-input> -->
-          <vue-numeric separator="," v-model="form.extracts" :value="form.extracts" class="vue-numeric-input"></vue-numeric>
+            <vue-numeric separator="," v-model="form.extracts" :value="form.extracts" class="vue-numeric-input"></vue-numeric>
+          </el-form-item>
 
+          <el-form-item label="Giảm giá" :label-width="formLabelWidth">
+            <vue-numeric separator="," v-model="form.promotion" :value="form.promotion" class="vue-numeric-input"></vue-numeric>
           </el-form-item>
 
           <el-form-item label="Tổng" :label-width="formLabelWidth">
-            <!-- <el-input v-model="form.total"></el-input> -->
-          <vue-numeric separator="," :disabled="true" v-model="form.total" :value="(form.cost)*(100-form.extracts)/100" class="vue-numeric-input"></vue-numeric>
-
+            <vue-numeric separator="," :disabled="true" v-model="form.total" :value="(form.cost)*(100-form.extracts)/100 - form.promotion" class="vue-numeric-input"></vue-numeric>
           </el-form-item>
 
         </el-form>
@@ -129,7 +127,8 @@ export default {
         total: 0,
         note: null,
         productId: null,
-        type: 'XUAT'
+        type: 'XUAT',
+        promotion: 0
       },
       formLabelWidth: '120px',
       pagination: {
