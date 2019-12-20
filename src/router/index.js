@@ -15,6 +15,7 @@ import BankAccounts from '@/components/bank_accounts'
 import Orders from '@/components/orders'
 import Users from '@/components/users'
 import Roles from '@/components/roles'
+import InternalTransactions from '@/components/internal_transactions'
 import E500 from '@/components/errors/e500'
 
 Vue.use(Router)
@@ -77,6 +78,11 @@ export default new Router({
           path: 'roles',
           name: 'roles',
           component: Roles
+        },
+        {
+          path: 'internal_transactions',
+          name: 'internal_transactions',
+          component: InternalTransactions
         }
       ]
     }

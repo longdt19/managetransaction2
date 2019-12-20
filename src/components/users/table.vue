@@ -27,7 +27,7 @@
 
       <el-table-column label="Thao tác" header-align="center" width="120px">
         <template slot-scope="scope">
-          <!-- <el-row>
+          <el-row>
             <el-col :span="12" style="text-align: center">
               <update-component
                 v-if="navigation.includes('UPDATE')"
@@ -49,8 +49,9 @@
                 :scope="scope.row"
                 @done_request="done_request"
               />
+              <reset-password />
             </el-col>
-          </el-row> -->
+          </el-row>
         </template>
       </el-table-column>
 
@@ -63,10 +64,10 @@
 import UpdateComponent from '@/components/common/create_or_update'
 import DeleteComponent from '@/components/common/delete'
 import {USERS_URL} from '@/constants/endpoints'
-// import UpdateRolesComponent from './roles'
+import ResetPassword from './reset_pass.vue'
 
 export default {
-  components: {UpdateComponent, DeleteComponent},
+  components: {UpdateComponent, DeleteComponent, ResetPassword},
   props: {
     dataTable: {type: Array},
     loading: {type: Boolean, default: false},

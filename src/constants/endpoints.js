@@ -47,3 +47,9 @@ export const ROLE_FIND_FIELD_URL = BASE + '/role/find-one-by-field'
 
 // feature
 export const FEATURE_URL = BASE + '/feature/search'
+
+// Reset password
+export const RESET_PASSWORD_URL = '/user/reset-password'
+
+// Internal Transactions
+export const INTERNAL_TRANSACTION_URL = '/internal-transaction'

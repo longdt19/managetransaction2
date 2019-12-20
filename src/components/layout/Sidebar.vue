@@ -27,6 +27,14 @@
         <span>Đơn hàng</span>
       </el-menu-item>
 
+      <el-menu-item index="internal_transactions" @click.native="go_to('internal_transactions')"
+      >
+        <el-tooltip class="item" effect="dark" content="Chuyển tiền" placement="right">
+          <img src="../../assets/icon/category.svg" style="width: 25px; margin-right: 10px" />
+        </el-tooltip>
+        <span>Chuyển tiền</span>
+      </el-menu-item>
+
       <el-menu-item index="products" @click.native="go_to('products')"
       >
         <el-tooltip class="item" effect="dark" content="Sản phẩm" placement="right">
