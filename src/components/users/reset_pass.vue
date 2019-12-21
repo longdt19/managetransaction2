@@ -1,6 +1,8 @@
 <template>
   <section>
-    <el-button icon="el-icon-refresh-left" @click="dialogFormVisible = true"></el-button>
+    <el-button icon="el-icon-refresh" @click="dialogFormVisible = true" size="mini"
+      :disabled="!this.common_data.navigation.USER.includes('UPDATE')"
+    ></el-button>
       <el-dialog title="Reset password" :visible.sync="dialogFormVisible">
 
         <el-row :gutter="30">

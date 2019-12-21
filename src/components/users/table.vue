@@ -29,7 +29,7 @@
         <template slot-scope="scope">
           <el-row>
             <el-col :span="12" style="text-align: center">
-              <update-component
+              <!-- <update-component
                 v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật tài khoản"
                 :api-url="apiUrl"
@@ -40,7 +40,7 @@
                 button-type=""
                 button-icon="el-icon-edit"
                 :scope="scope.row"
-              />
+              /> -->
             </el-col>
             <el-col :span="12" style="text-align: center">
               <delete-component
