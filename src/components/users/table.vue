@@ -49,7 +49,7 @@
                 :scope="scope.row"
                 @done_request="done_request"
               />
-              <reset-password />
+              <reset-password :user="scope.row"/>
             </el-col>
           </el-row>
         </template>

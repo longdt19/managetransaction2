@@ -1,10 +1,21 @@
 <template>
 <section v-if="navigation">
   <div style="text-align: right" :style="navigation.includes('CREATE') ? '' : 'display: none'">
-    <create-component
-        @done_request="done_request"
-        button-title="Tạo mới"
-        button-type='primary'/>
+
+    <div class="" style="display: inline-flex">
+      <div class="" style="margin-right: 10px">
+        <transfer-component
+          @done_request="done_request"
+        />
+      </div>
+      <div class="">
+        <create-component
+            @done_request="done_request"
+            button-title="Tạo mới"
+            button-type='primary'/>
+      </div>
+    </div>
+
   </div>
   <search-component @done_request="done_request"/>
 
@@ -28,6 +39,7 @@ import {TRANSACTION_URL} from '@/constants/endpoints'
 import CreateComponent from './create_or_update'
 import TableComponent from './table'
 import SearchComponent from './search'
+import TransferComponent from './transfers'
 
 export default {
   components: {
@@ -35,7 +47,8 @@ export default {
     TableComponent,
     CreateComponent,
     SelectPerpageComponent,
-    PaginationComponent
+    PaginationComponent,
+    TransferComponent
   },
   data () {
     return {

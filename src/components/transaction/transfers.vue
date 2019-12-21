@@ -1,7 +1,7 @@
 <template>
 <section>
-  <el-button :type="buttonType" :size="buttonSize"
-    @click="open()" :icon="buttonIcon">{{buttonTitle}}</el-button>
+  <el-button type="warning"
+    @click="open()">Chuyển tiền</el-button>
 
 <el-dialog :title="this.scope ? 'Chỉnh sửa' : 'Tạo mới'" :visible.sync="dialogFormVisible" style="text-align: left">
   <el-row :gutter="20" style="margin-top: 20px">
@@ -18,12 +18,8 @@
           </el-date-picker>
         </el-form-item>
 
-        <el-form-item label="Mã giao dịch" :label-width="formLabelWidth" prop="code">
+        <el-form-item label="Mã chuyển tiền" :label-width="formLabelWidth" prop="code">
           <el-input v-model="form.code"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Nội dung" :label-width="formLabelWidth">
-          <el-input v-model="form.content"></el-input>
         </el-form-item>
 
         <el-form-item label="Số tiền" :label-width="formLabelWidth" prop="money">
@@ -36,29 +32,23 @@
           <vue-numeric separator="," v-model="form.bankFee" value="0" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
-        <el-form-item label="Loại" :label-width="formLabelWidth">
-          <el-radio-group v-model="form.type">
-            <el-radio label="CHUYEN_TIEN">Chuyển tiền</el-radio>
-            <el-radio label="NHAN_TIEN">Nhận tiền</el-radio>
-          </el-radio-group>
+        <el-form-item label="Nội dung" :label-width="formLabelWidth">
+          <el-input v-model="form.content"></el-input>
         </el-form-item>
 
       </el-form>
     </div></el-col>
 
     <el-col :span="12"><div>
+
       <el-form :model="form" :rules="rules" ref="form2">
 
-        <el-form-item label="Người giao dịch" :label-width="formLabelWidth" prop="traders">
+        <el-form-item label="Người giao dịch" :label-width="'150px'" prop="traders">
           <el-input v-model="form.traders"></el-input>
         </el-form-item>
 
-        <el-form-item label="Ghi chú" :label-width="formLabelWidth">
-          <el-input v-model="form.note"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Ngân hàng" :label-width="formLabelWidth" prop="bankAccountId">
-          <el-select v-model="form.bankAccountId" placeholder="Vui lòng chọn"
+        <el-form-item label="Ngân hàng chuyển" :label-width="'150px'" prop="fromBankAccountId">
+          <el-select v-model="form.fromBankAccountId" placeholder="Vui lòng chọn"
             filterable
             @focus="get_bank_account_list()"
             :loading="bank_accounts.loading"
@@ -72,32 +62,16 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Khách hàng" :label-width="formLabelWidth" prop="customerId">
-          <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
+        <el-form-item label="Ngân hàng nhận" :label-width="'150px'" prop="toBankAccountId">
+          <el-select v-model="form.toBankAccountId" placeholder="Vui lòng chọn"
             filterable
-            @focus="get_customer_list()"
-            :loading="customers.loading"
-            @change="form.orderId = null"
+            @focus="get_bank_account_list()"
+            :loading="bank_accounts.loading"
           >
             <el-option
-              v-for="b in customers.list"
+              v-for="b in bank_accounts.list"
               :key="b.id"
-              :label="b.name"
-              :value="b.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Đơn hàng" :label-width="formLabelWidth" prop="orderId" v-if="form.customerId">
-          <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
-            filterable
-            @focus="get_order_list()"
-            :loading="order.loading"
-          >
-            <el-option
-              v-for="b in order.list"
-              :key="b.id"
-              :label="b.code"
+              :label="b.bankName"
               :value="b.id"
             ></el-option>
           </el-select>
@@ -118,12 +92,9 @@
 <script>
 import {
   BANK_ACCOUNTS_URL,
-  CUSTOMER_URL,
-  ORDERS_CUSTOMER_LIST_URL,
-  TRANSACTION_URL
+  INTERNAL_TRANSACTION_URL
 } from '@/constants/endpoints'
-import {TRANSACTION_TYPE_LIST} from '@/constants'
-import {TRANSACTION_RULES} from '@/constants/rules_input'
+import {TRANSFER_RULES} from '@/constants/rules_input'
 import getDays from '@/utils/day'
 
 export default {
@@ -138,17 +109,14 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        bankAccountId: null,
-        bankFee: 0,
-        code: null,
-        content: null,
-        customerId: null,
-        money: 0,
-        orderId: null,
         time: null,
-        type: 'CHUYEN_TIEN',
-        traders: null,
-        note: null
+        code: null,
+        money: 0,
+        bankFee: 0,
+        content: null,
+        fromBankAccountId: null,
+        toBankAccountId: null,
+        traders: null
       },
       formLabelWidth: '120px',
       loading: false,
@@ -162,30 +130,14 @@ export default {
         loading: false,
         list: []
       },
-      customers: {
-        loading: false,
-        list: []
-      },
-      order: {
-        loading: false,
-        list: []
-      },
-      transaction_type_list: TRANSACTION_TYPE_LIST,
       old_state: {},
-      rules: TRANSACTION_RULES
+      rules: TRANSFER_RULES
     }
   },
   methods: {
     getDays,
     open () {
       this.form.time = this.getDays().to_date
-      if (this.scope) {
-        this.form = Object.assign({}, this.scope)
-        this.form.bankAccountId = this.scope.bankName
-        this.form.customerId = this.scope.azAccount
-        this.form.orderId = this.scope.orderCode
-        this.old_state = Object.assign({}, this.form)
-      }
       this.dialogFormVisible = true
     },
     async create (form1, form2) {
@@ -205,19 +157,9 @@ export default {
       if (this.loading) return
       this.loading = true
       let method = 'post'
-      let url = TRANSACTION_URL.replace('/search', '')
-
-      if (this.scope) {
-        method = 'put'
-        url = url + '/' + this.scope.id
-
-        this.form.bankAccountId = this.form.bankAccountId === this.old_state.bankAccountId ? this.scope.bankAccountId : this.form.bankAccountId
-        this.form.customerId = this.form.customerId === this.old_state.customerId ? this.scope.customerId : this.form.customerId
-        this.form.orderId = this.form.orderId === this.old_state.orderId ? this.scope.orderId : this.form.orderId
-      }
 
       const payload = this.form
-      const response = await this.$services.do_request(method, url, payload)
+      const response = await this.$services.do_request(method, INTERNAL_TRANSACTION_URL, payload)
       this.loading = false
 
       if (response.status === 200 || response.status === 202) {
@@ -226,25 +168,6 @@ export default {
         this.dialogFormVisible = false
       } else {
         this.$message.error('Thất bại')
-      }
-    },
-    async get_customer_list () {
-      if (this.customers.loading) return
-      if (this.customers.list.length) return
-      this.customers.loading = true
-
-      const params = {
-        'page': this.pagination.page,
-        'size': this.pagination.size,
-        'sort': this.sorted_by
-      }
-
-      const response = await this.$services.do_request('get', CUSTOMER_URL, params)
-
-      if (response.status === 200) {
-        this.customers.loading = false
-
-        this.customers.list = response.data
       }
     },
     async get_bank_account_list () {
@@ -263,22 +186,6 @@ export default {
         this.bank_accounts.loading = false
 
         this.bank_accounts.list = response.data
-      }
-    },
-    async get_order_list () {
-      if (this.order.loading) return
-      this.order.loading = true
-
-      const params = {
-        'customerId': this.form.customerId
-      }
-
-      const response = await this.$services.do_request('get', ORDERS_CUSTOMER_LIST_URL, params)
-
-      if (response.status === 200) {
-        this.order.loading = false
-
-        this.order.list = response.data.content
       }
     }
   },

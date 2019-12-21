@@ -7,6 +7,9 @@ export const TRANSACTION_RULES = {
   ],
   bankAccountId: [
     {required: true, message: 'Ngân hàng không được để trống', trigger: 'change'}
+  ],
+  traders: [
+    {required: true, message: 'Người giao dịch không được để trống', trigger: 'blur'}
   ]
 }
 
@@ -28,5 +31,23 @@ export const CUSTOMER_RULES = {
   ],
   name: [
     {required: true, message: 'Tên không được để trống', trigger: 'change'}
+  ]
+}
+
+export const TRANSFER_RULES = {
+  fromBankAccountId: [
+    {required: true, message: 'Ngân hàng chuyển không được để trống', trigger: 'change'}
+  ],
+  toBankAccountId: [
+    {required: true, message: 'Ngân hàng nhận không được để trống', trigger: 'change'}
+  ],
+  code: [
+    {required: true, message: 'Mã giao dịch không được để trống', trigger: 'blur'}
+  ],
+  money: [
+    {required: true, message: 'Số tiền không được để trống', trigger: 'blur'}
+  ],
+  traders: [
+    {required: true, message: 'Người giao dịch không được để trống', trigger: 'blur'}
   ]
 }

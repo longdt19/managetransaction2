@@ -118,7 +118,7 @@
               v-if="scope.row.allowUpdate && scope.row.status === 'MOI_TAO'"
             >
               <update-component
-                v-if="navigation.includes('UPDATE')"
+                v-if="navigation.includes('UPDATE') && !scope.row.isInternal"
                 :scope="scope.row"
                 button-size="mini"
                 button-icon="el-icon-edit"
