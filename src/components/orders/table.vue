@@ -54,12 +54,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Tổng" width="120" header-align="center">
-        <template slot-scope="scope">
-          {{ Number(scope.row.total).toLocaleString()}}
-        </template>
-      </el-table-column>
-
       <!-- ********************************************************************
       **********************   Thanh toán    **********************************
       ********************************************************************** -->
@@ -75,6 +69,12 @@
             {{ scope.row.type === 'NHAP' ? Number(scope.row.paid).toLocaleString() : ''}}
           </template>
         </el-table-column>
+      </el-table-column>
+
+      <el-table-column label="Tổng" width="120" header-align="center">
+        <template slot-scope="scope">
+          {{ Number(scope.row.total).toLocaleString()}}
+        </template>
       </el-table-column>
 
       <el-table-column label="Hình thức" width="120" header-align="center">

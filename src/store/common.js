@@ -55,7 +55,34 @@ export default {
       state.pagination.current_page = value
     },
     rsql: (state, value) => {
-      state.rsql = value
+      let params = ''
+      if (value) {
+        console.log('value', value)
+        if (value.date.from_date) {
+          params = params + `time>=${value.date.from_date};`
+        }
+        if (value.date.to_date) {
+          params = params + `time<=${value.date.to_date};`
+        }
+
+        // load with constant
+        for (const i in value.constant) {
+          if (value.constant[i].value) {
+            params = params + `${value.constant[i].key}=='${value.constant[i].value}';`
+          }
+        }
+
+        // load with form
+        for (const i in value.form) {
+          if (value.form[i].value) {
+            params = params + `${value.form[i].key}=='*${value.form[i].value}*';`
+          }
+        }
+
+        params = params.replace(/;$/, '')
+        console.log('paras', params)
+      }
+      state.rsql = params
     },
     navigation: (state, value) => {
       state.navigation = value

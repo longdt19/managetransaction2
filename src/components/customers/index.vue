@@ -1,18 +1,13 @@
 <template>
 <section>
-  <el-row :gutter="50">
-    <el-col :span="12"><div class="grid-content bg-purple">
-        <search-component @done_request="done_request"/>
-    </div></el-col>
+  <div style="text-align: right">
+    <create-component
+        @done_request="done_request"
+        button-title="Tạo mới"
+        button-type='primary'/>
+  </div>
 
-    <el-col :span="12"><div style="text-align: right;" :style="navigation.includes('CREATE') ? '' : 'display: none'">
-        <create-component
-          @done_request="done_request"
-          button-title="Tạo mới"
-          button-type='primary'/>
-    </div></el-col>
-
-  </el-row>
+  <search-component @done_request="done_request"/>
 
   <div style="margin-top: 30px">
     <select-perpage-component />

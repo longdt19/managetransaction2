@@ -54,7 +54,7 @@
 
     <el-col :span="2"><div class="grid-content bg-purple">
       <span>Phê duyệt</span>
-      <el-select v-model="status">
+      <el-select v-model="constant.status.value">
         <el-option
           v-for="item in accept_types"
           :key="item.tooltip"
@@ -89,33 +89,23 @@ export default {
         azAccount: {key: 'customer.azAccount', value: null},
         content: {key: 'content', value: null},
         code: {key: 'code', value: null},
-        bankName: {key: 'bankAccount.bankName', value: null},
+        bankName: {key: 'bankAccount.bankName', value: null}
+      },
+      constant: {
         status: {key: 'status', value: null}
       },
-      status: null,
+      show_date_error: false,
       accept_types: ACCEPT_TYPE_LIST
     }
   },
   methods: {
     search () {
-      let params = ''
-      for (const i in this.form) {
-        if (this.form[i].value) {
-          params = params + `${this.form[i].key}=='*${this.form[i].value}*';`
-        }
+      const payload = {
+        ...{'date': this.date},
+        ...{'constant': this.constant},
+        ...{'form': this.form}
       }
-      if (this.date.from_date) {
-        params = params + `time>=${this.date.from_date};`
-      }
-      if (this.date.to_date) {
-        params = params + `time<=${this.date.to_date};`
-      }
-      if (this.status) {
-        params = params + `status==${this.status};`
-      }
-      params = params.replace(/;$/, '')
-      console.log('params', params)
-      this.$store.commit('Common/rsql', params)
+      this.$store.commit('Common/rsql', payload)
       this.$emit('done_request')
     }
   },
