@@ -57,7 +57,6 @@ export default {
     rsql: (state, value) => {
       let params = ''
       if (value) {
-        console.log('value', value)
         if (value.date.from_date) {
           params = params + `time>=${value.date.from_date};`
         }
@@ -80,7 +79,6 @@ export default {
         }
 
         params = params.replace(/;$/, '')
-        console.log('paras', params)
       }
       state.rsql = params
     },

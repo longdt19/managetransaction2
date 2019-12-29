@@ -34,7 +34,7 @@ import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
 import CreateComponent from '@/components/common/create_or_update'
-import {ROLE_TABLE_URL, FEATURE_URL} from '@/constants/endpoints'
+import {ROLE_TABLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -60,35 +60,6 @@ export default {
     }
   },
   methods: {
-    async get_roles_list () {
-      // if (this.loading) return
-      // this.loading = true
-
-      // let payload = {}
-      // this.itemsCreate.forEach(item => {
-      //   payload[item.key] = item.value
-      // })
-      //
-      // let url = this.apiUrl
-      // if (this.methodRequest === 'put') {
-      //   url = url + '/' + this.scope.id
-      // }
-
-      const response = await this.$services.do_request('get', FEATURE_URL)
-      // this.loading = false
-      console.log('res', response)
-
-      // if (response.status === 200) {
-      //   this.$message.success('Tạo mới thành công')
-      // }
-      // if (response.status === 202) {
-      //   this.$message.success('Cập nhật thành công')
-      // }
-      //
-      // this.loading = false
-      // this.$emit('done_request')
-      // this.dialogFormVisible = false
-    },
     async load_list () {
       if (this.loading) return
       this.loading = true
@@ -140,7 +111,6 @@ export default {
     }
     this.$store.commit('Common/pagination', pagination)
     this.load_list()
-    this.get_roles_list()
   }
 }
 </script>

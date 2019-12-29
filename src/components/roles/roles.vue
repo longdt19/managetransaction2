@@ -106,12 +106,10 @@ export default {
           if (value) id_list.push(value)
         }
       })
-      console.log('this.scope', this.scope)
       const payload = {
         'featureIds': id_list,
         'name': this.scope.name
       }
-      console.log('payload', payload)
       let url = ROLE_URL + '/' + this.scope.id
       const response = await this.$services.do_request('put', url, payload)
       this.loading = false
@@ -125,7 +123,6 @@ export default {
       }
     },
     async gen_data_table () {
-      console.log('gen data')
       this.loading = true
       const params = {
         'page': 0,
@@ -156,9 +153,7 @@ export default {
       this.dataTable = data
     },
     async get_role () {
-      console.log('get data')
       this.loading = true
-      console.log('scope', this.scope)
       const params = {
         field: 'name',
         value: this.scope.name

@@ -62,7 +62,6 @@ export default {
       if (this.common_data.rsql) {
         params['filter'] = this.common_data.rsql
       }
-      console.log('params', params)
       const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.loading = false
       if (response.status === 200) {
@@ -94,6 +93,7 @@ export default {
       this.$message.error('Bạn không có quyền hạn cho chức năng này')
       return
     }
+    this.$store.commit('Common/rsql', null)
     const pagination = {
       size: 10,
       element_total: 0,

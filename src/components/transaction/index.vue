@@ -113,6 +113,7 @@ export default {
       this.$message.error('Bạn không có quyền hạn cho chức năng này')
       return
     }
+    this.$store.commit('Common/rsql', null)
     const pagination = {
       size: 10,
       element_total: 0,

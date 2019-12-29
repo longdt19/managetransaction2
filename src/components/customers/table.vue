@@ -116,7 +116,7 @@
       </el-table-column> -->
 
       <el-table-column label="Địa chỉ" header-align="center">
-        <el-table-column label="Xã" header-align="center">
+        <el-table-column label="Xã/Phường" header-align="center">
           <template slot-scope="scope">
             {{ scope.row.wardName}}
           </template>

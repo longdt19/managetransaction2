@@ -1,4 +1,4 @@
-export const BASE = '/transaction-api'
+export const BASE = ''
 export const LOGIN_URL = BASE + '/login'
 export const CHANGE_PASS_URL = BASE + '/api/az/mngt/auth/change-password'
 

@@ -55,17 +55,56 @@
 
     <el-col :span="2"><div class="grid-content bg-purple">
       <span>Tỉnh</span>
-      <el-input v-model="form.provinceName.value" clearable/>
+      <!-- <el-input v-model="form.provinceName.value" clearable/> -->
+      <el-select v-model="constant.provinceName.value" placeholder="Vui lòng chọn"
+        filterable
+        @focus="get_province_list()"
+        :loading="province.loading"
+        @change="change_province()"
+        clearable
+      >
+        <el-option
+          v-for="p in province.list"
+          :key="p.id"
+          :label="p.name"
+          :value="p.id"
+        ></el-option>
+      </el-select>
     </div></el-col>
 
-    <el-col :span="2"><div class="grid-content bg-purple">
-      <span>Huyện</span>
-      <el-input v-model="form.districtName.value" clearable/>
+    <el-col :span="2"><div class="grid-content bg-purple" v-if="constant.provinceName.value">
+      <span>Huyện/Quận</span>
+      <el-select v-model="constant.districtName.value" placeholder="Vui lòng chọn"
+        filterable
+        @focus="get_district_list()"
+        :loading="district.loading"
+        @change="change_district()"
+        clearable
+      >
+        <el-option
+          v-for="d in district.list"
+          :key="d.id"
+          :label="d.name"
+          :value="d.id"
+        ></el-option>
+      </el-select>
     </div></el-col>
 
-    <el-col :span="2"><div class="grid-content bg-purple">
-      <span>Xã</span>
-      <el-input v-model="form.wardName.value" clearable/>
+    <el-col :span="2"><div class="grid-content bg-purple" v-if="constant.districtName.value">
+      <span>Xã/Phường</span>
+      <el-select v-model="constant.wardName.value" placeholder="Vui lòng chọn"
+        filterable
+        @focus="get_ward_list()"
+        :loading="ward.loading"
+        clearable
+      >
+        <el-option
+          v-for="w in ward.list"
+          :key="w.id"
+          :label="w.fullName"
+          :value="w.id"
+        ></el-option>
+      </el-select>
     </div></el-col>
 
     <el-col :span="2"><div class="grid-content bg-purple">
@@ -79,6 +118,10 @@
 </template>
 
 <script>
+import {
+  LOCAL_PROVINCE_URL,
+  LOCAL_DISTRICT_URL,
+  LOCAL_WARD_URL} from '@/constants/endpoints'
 import getDays from '@/utils/day'
 export default {
   data () {
@@ -92,10 +135,24 @@ export default {
         azAccount: {key: 'azAccount', value: null},
         phone: {key: 'phone', value: null},
         manager: {key: 'manager', value: null},
-        groupName: {key: 'group.name', value: null},
-        wardName: {key: 'ward.name', value: null},
-        districtName: {key: 'district.name', value: null},
-        provinceName: {key: 'province.name', value: null}
+        groupName: {key: 'group.name', value: null}
+      },
+      constant: {
+        wardName: {key: 'ward.id', value: null},
+        districtName: {key: 'district.id', value: null},
+        provinceName: {key: 'province.id', value: null}
+      },
+      province: {
+        loading: false,
+        list: []
+      },
+      district: {
+        loading: false,
+        list: []
+      },
+      ward: {
+        loading: false,
+        list: []
       }
     }
   },
@@ -108,12 +165,65 @@ export default {
       }
       this.$store.commit('Common/rsql', payload)
       this.$emit('done_request')
+    },
+    async get_province_list () {
+      if (this.province.list.length) return
+      if (this.province.loading) return
+      this.province.loading = true
+
+      const response = await this.$services.do_request('get', LOCAL_PROVINCE_URL)
+
+      this.province.loading = false
+
+      if (response.status === 200) {
+        this.province.list = response.data
+      }
+    },
+    async get_district_list () {
+      if (this.district.list.length) return
+      if (this.district.loading) return
+      this.district.loading = true
+      let provinceId = this.constant.provinceName.value
+      let url = LOCAL_DISTRICT_URL + '?provinceId=' + provinceId
+      const response = await this.$services.do_request('get', url)
+
+      this.district.loading = false
+
+      if (response.status === 200) {
+        this.district.list = response.data
+      }
+    },
+    async get_ward_list () {
+      if (this.ward.list.length) return
+      if (this.ward.loading) return
+      this.ward.loading = true
+
+      let districtId = this.constant.districtName.value
+
+      let url = LOCAL_WARD_URL + '?districtId=' + districtId
+      const response = await this.$services.do_request('get', url)
+
+      this.ward.loading = false
+
+      if (response.status === 200) {
+        this.ward.list = response.data
+      }
+    },
+    change_province () {
+      this.constant.districtName.value = null
+      this.district.list = []
+      this.constant.wardName.value = null
+      this.ward.list = []
+    },
+    change_district () {
+      this.constant.wardName.value = null
+      this.ward.list = []
     }
   },
   watch: {
     ...['date.from_date', 'date.to_date', 'form.name.value', 'form.azAccount.value',
-      'form.phone.value', 'form.manager.value', 'form.groupName.value', 'form.wardName.value',
-      'form.districtName.value', 'form.provinceName.value'
+      'form.phone.value', 'form.manager.value', 'form.groupName.value', 'constant.wardName.value',
+      'constant.districtName.value', 'constant.provinceName.value'
     ].reduce((watchers, key) => ({
       ...watchers,
       [key] (newVal, oldVal) {
@@ -122,6 +232,7 @@ export default {
     }), {})
   },
   created () {
+    this.$store.commit('Common/rsql', null)
     let day = getDays()
     this.from_date = day.from_date
     this.to_date = day.to_date
