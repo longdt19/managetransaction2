@@ -79,7 +79,7 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const params = {
+      let params = {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
         'sort': this.sorted_by

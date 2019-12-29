@@ -54,14 +54,15 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const params = {
+      let params = {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
-        'sort': this.sorted_by,
-        'fromTime': this.common_data.search.from_date,
-        'toTime': this.common_data.search.to_date
+        'sort': this.sorted_by
       }
-
+      if (this.common_data.rsql) {
+        params['filter'] = this.common_data.rsql
+      }
+      console.log('params', params)
       const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.loading = false
       if (response.status === 200) {

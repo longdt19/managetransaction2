@@ -92,10 +92,10 @@ export default {
         azAccount: {key: 'azAccount', value: null},
         phone: {key: 'phone', value: null},
         manager: {key: 'manager', value: null},
-        groupName: {key: 'groupName', value: null},
-        wardName: {key: 'wardName', value: null},
-        districtName: {key: 'districtName', value: null},
-        provinceName: {key: 'provinceName', value: null}
+        groupName: {key: 'group.name', value: null},
+        wardName: {key: 'ward.name', value: null},
+        districtName: {key: 'district.name', value: null},
+        provinceName: {key: 'province.name', value: null}
       }
     }
   },
