@@ -120,7 +120,6 @@ export default {
       current_page: 0
     }
     this.$store.commit('Common/pagination', pagination)
-    this.$store.commit('Common/rsql', null)
     this.load_list()
   }
 }

@@ -57,9 +57,10 @@ export default {
       const params = {
         'page': this.common_data.pagination.current_page,
         'size': this.common_data.pagination.size,
-        'sort': this.sorted_by,
-        'fromTime': this.common_data.search.from_date,
-        'toTime': this.common_data.search.to_date
+        'sort': this.sorted_by
+      }
+      if (this.common_data.rsql) {
+        params['filter'] = this.common_data.rsql
       }
 
       const response = await this.$services.do_request('get', ORDERS_URL, params)
@@ -94,6 +95,7 @@ export default {
       this.$message.error('Bạn không có quyền hạn cho chức năng này')
       return
     }
+    this.$store.commit('Common/rsql', null)
     const pagination = {
       size: 10,
       element_total: 0,

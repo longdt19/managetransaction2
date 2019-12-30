@@ -42,14 +42,14 @@
       <el-input v-model="form.productName.value" clearable/>
     </div></el-col>
 
-    <el-col :span="3"><div class="grid-content bg-purple">
+    <!-- <el-col :span="3"><div class="grid-content bg-purple">
       <span>Ngân hàng</span>
       <el-input clearable/>
-    </div></el-col>
+    </div></el-col> -->
 
      <el-col :span="2"><div class="grid-content bg-purple">
       <span>Loại</span>
-      <el-select v-model="constant.type.value">
+      <el-select v-model="constant.type.value" clearable>
         <el-option
           v-for="item in order_type_list"
           :key="item.key"
@@ -82,7 +82,7 @@ export default {
       form: {
         code: {key: 'code', value: null},
         azAccount: {key: 'customer.azAccount', value: null},
-        productName: {key: 'product.productName', value: null},
+        productName: {key: 'product.name', value: null},
         bankName: {key: 'bankAccount.bankName', value: null}
       },
       constant: {
@@ -104,7 +104,7 @@ export default {
   },
   watch: {
     ...['date.from_date', 'date.to_date', 'form.code.value', 'form.azAccount.value',
-      'form.prductName.value', 'form.bankName.value', 'constain.type.value'
+      'form.productName.value', 'form.bankName.value', 'constant.type.value'
     ].reduce((watchers, key) => ({
       ...watchers,
       [key] (newVal, oldVal) {

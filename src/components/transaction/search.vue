@@ -54,7 +54,7 @@
 
     <el-col :span="2"><div class="grid-content bg-purple">
       <span>Phê duyệt</span>
-      <el-select v-model="constant.status.value">
+      <el-select v-model="constant.status.value" clearable>
         <el-option
           v-for="item in accept_types"
           :key="item.tooltip"
@@ -111,7 +111,7 @@ export default {
   },
   watch: {
     ...['date.from_date', 'date.to_date', 'form.traders.value', 'form.azAccount.value',
-      'form.content.value', 'form.code.value', 'form.bankName.value', 'status.value'
+      'form.content.value', 'form.code.value', 'form.bankName.value', 'constant.status.value'
     ].reduce((watchers, key) => ({
       ...watchers,
       [key] (newVal, oldVal) {
