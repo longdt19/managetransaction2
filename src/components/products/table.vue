@@ -22,9 +22,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Tồn" header-align="center">
+      <el-table-column label="Tồn" header-align="center" width="120">
         <template slot-scope="scope">
-          {{ scope.row.inventory }}
+          {{ Number(scope.row.inventory).toLocaleString() }}
         </template>
       </el-table-column>
 
@@ -32,21 +32,21 @@
       **********************   Tồn đầu kỳ    **********************************
       ********************************************************************** -->
       <el-table-column label="Tồn đầu kỳ" header-align="center">
-        <el-table-column label="Nhập" width="100" header-align="center">
+        <el-table-column label="Nhập" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodImport }}
+            {{ Number(scope.row.previousPeriodImport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Xuất" width="100" header-align="center">
+        <el-table-column label="Xuất" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodExport }}
+            {{ Number(scope.row.previousPeriodExport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Tồn" width="100" header-align="center">
+        <el-table-column label="Tồn" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.previousPeriodInventory }}
+            {{ Number(scope.row.previousPeriodInventory).toLocaleString() }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -55,21 +55,21 @@
       **********************   Tồn trong kỳ    ********************************
       ********************************************************************** -->
       <el-table-column label="Tồn trong kỳ" header-align="center">
-        <el-table-column label="Nhập" width="100" header-align="center">
+        <el-table-column label="Nhập" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodImport }}
+            {{ Number(scope.row.currentPeriodImport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Xuất" width="100" header-align="center">
+        <el-table-column label="Xuất" width="120" header-align="center">
           <template slot-scope="scope">
-              {{ scope.row.currentPeriodExport }}
+              {{ Number(scope.row.currentPeriodExport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Tồn" width="100" header-align="center">
+        <el-table-column label="Tồn" width="120" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.currentPeriodInventory }}
+            {{ Number(scope.row.currentPeriodInventory).toLocaleString() }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -77,9 +77,9 @@
       <!-- ********************************************************************
       *************************************************************************
       ********************************************************************** -->
-      <el-table-column label="Tổng tồn" width="150" header-align="center">
+      <el-table-column label="Tổng tồn" width="120" header-align="center">
         <template slot-scope="scope">
-          {{ scope.row.inventory }}
+          {{ Number(scope.row.inventory).toLocaleString() }}
         </template>
       </el-table-column>
 

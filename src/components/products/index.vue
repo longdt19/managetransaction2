@@ -81,11 +81,24 @@ export default {
 
       if (response.status === 200) {
         this.loading = false
-
+        this.pagination = {
+          current_page: response.data.pageable.pageNumber,
+          size: response.data.pageable.pageSize,
+          element_total: response.data.totalElements
+        }
+        this.$store.commit('Common/pagination', this.pagination)
         this.data_table = response.data.content
       }
     },
     done_request () {
+      this.load_list()
+    }
+  },
+  watch: {
+    'common_data.pagination.size' (val) {
+      this.load_list()
+    },
+    'common_data.pagination.current_page' (val) {
       this.load_list()
     }
   },
@@ -95,6 +108,12 @@ export default {
       this.$message.error('Bạn không có quyền hạn cho chức năng này')
       return
     }
+    const pagination = {
+      size: 10,
+      element_total: 0,
+      current_page: 0
+    }
+    this.$store.commit('Common/pagination', pagination)
     this.load_list()
   }
 }
