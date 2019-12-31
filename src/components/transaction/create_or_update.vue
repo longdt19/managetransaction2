@@ -75,14 +75,16 @@
         <el-form-item label="Khách hàng" :label-width="formLabelWidth" prop="customerId">
           <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
             filterable
-            @focus="get_customer_list()"
+            remote
+            :remote-method="get_customer_list"
             :loading="customers.loading"
             @change="form.orderId = null"
+            reserve-keyword
           >
             <el-option
               v-for="b in customers.list"
               :key="b.id"
-              :label="b.name"
+              :label="b.azAccount"
               :value="b.id"
             ></el-option>
           </el-select>
@@ -91,7 +93,8 @@
         <el-form-item label="Đơn hàng" :label-width="formLabelWidth" prop="orderId" v-if="form.customerId">
           <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
             filterable
-            @focus="get_order_list()"
+            remote
+            :remote-method="get_order_list"
             :loading="order.loading"
           >
             <el-option
@@ -118,9 +121,9 @@
 <script>
 import {
   BANK_ACCOUNTS_URL,
-  CUSTOMER_URL,
-  ORDERS_CUSTOMER_LIST_URL,
-  TRANSACTION_URL
+  CUSTOMER_TABLE_URL,
+  TRANSACTION_URL,
+  ORDERS_URL
 } from '@/constants/endpoints'
 import {TRANSACTION_TYPE_LIST} from '@/constants'
 import {TRANSACTION_RULES} from '@/constants/rules_input'
@@ -155,7 +158,7 @@ export default {
       data_table: [],
       pagination: {
         page: 0,
-        size: 10
+        size: 100
       },
       sorted_by: 'createdAt,desc',
       bank_accounts: {
@@ -177,6 +180,9 @@ export default {
   },
   methods: {
     getDays,
+    filter_method (query) {
+      console.log('qeury', query)
+    },
     open () {
       this.form.time = this.getDays().to_date
       if (this.scope) {
@@ -228,23 +234,25 @@ export default {
         this.$message.error('Thất bại')
       }
     },
-    async get_customer_list () {
+    async get_customer_list (query) {
+      if (query === '') return []
       if (this.customers.loading) return
-      if (this.customers.list.length) return
       this.customers.loading = true
-
-      const params = {
+      let params = {
         'page': this.pagination.page,
         'size': this.pagination.size,
         'sort': this.sorted_by
       }
+      if (query) {
+        params['filter'] = `azAccount=='*${query}*'`
+      }
 
-      const response = await this.$services.do_request('get', CUSTOMER_URL, params)
+      const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
 
       if (response.status === 200) {
         this.customers.loading = false
-
-        this.customers.list = response.data
+        query = ''
+        this.customers.list = response.data.content
       }
     },
     async get_bank_account_list () {
@@ -265,15 +273,17 @@ export default {
         this.bank_accounts.list = response.data
       }
     },
-    async get_order_list () {
+    async get_order_list (query) {
+      if (query === '') return []
       if (this.order.loading) return
       this.order.loading = true
 
-      const params = {
-        'customerId': this.form.customerId
+      let params = {
+        'customerId': this.form.customerId,
+        'filter': `code=='*${query}*'`
       }
 
-      const response = await this.$services.do_request('get', ORDERS_CUSTOMER_LIST_URL, params)
+      const response = await this.$services.do_request('get', ORDERS_URL, params)
 
       if (response.status === 200) {
         this.order.loading = false
