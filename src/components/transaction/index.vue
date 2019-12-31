@@ -107,6 +107,14 @@ export default {
       this.load_list()
     }
   },
+  watch: {
+    'common_data.pagination.size' (val) {
+      this.load_list()
+    },
+    'common_data.pagination.current_page' (val) {
+      this.load_list()
+    }
+  },
   created () {
     this.navigation = this.common_data.navigation.TRANSACTION
     if (!this.navigation) {
