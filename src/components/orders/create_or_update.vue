@@ -26,7 +26,8 @@
           <el-form-item label="Khách hàng" :label-width="formLabelWidth" prop="customerId">
             <el-select v-model="form.customerId" placeholder="Vui lòng chọn"
               filterable
-              @focus="get_customer_list()"
+              remote
+              :remote-method="get_customer_list"
               :loading="customer.loading"
             >
               <el-option
@@ -102,7 +103,7 @@
 
 <script>
 import {ORDER_TYPE_LIST} from '@/constants'
-import {CUSTOMER_URL, PRODUCTS_URL, ORDERS_URL} from '@/constants/endpoints'
+import {CUSTOMER_TABLE_URL, PRODUCTS_URL, ORDERS_URL} from '@/constants/endpoints'
 import {ORDER_RULES} from '@/constants/rules_input'
 
 import getDays from '@/utils/day'
@@ -201,8 +202,8 @@ export default {
         this.$message.error('Thất bại')
       }
     },
-    async get_customer_list () {
-      if (this.customer.list.length) return
+    async get_customer_list (query) {
+      if (query === '') return []
       if (this.customer.loading) return
       this.customer.loading = true
 
@@ -211,12 +212,15 @@ export default {
         'size': this.pagination.size,
         'sort': this.sorted_by
       }
+      if (query) {
+        params['filter'] = `azAccount=='*${query}*'`
+      }
 
-      const response = await this.$services.do_request('get', CUSTOMER_URL, params)
+      const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.customer.loading = false
 
       if (response.status === 200) {
-        this.customer.list = response.data
+        this.customer.list = response.data.content
       }
     },
     async get_product_list () {
