@@ -57,6 +57,7 @@ export default {
     let day = getDays()
     this.from_date = day.from_date
     this.to_date = day.to_date
+    this.$store.commit('Common/search', {from_date: day.from_date, to_date: day.to_date})
   }
 }
 </script>

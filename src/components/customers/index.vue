@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     async load_list () {
+      console.log('load')
       if (this.loading) return
       this.loading = true
 
@@ -62,6 +63,14 @@ export default {
       if (this.common_data.rsql) {
         params['filter'] = this.common_data.rsql
       }
+      console.log('common_data', this.common_data.search)
+      if (this.common_data.search.from_date) {
+        params['fromTime'] = this.common_data.search.from_date
+      }
+      if (this.common_data.search.to_date) {
+        params['toTime'] = this.common_data.search.to_date
+      }
+
       const response = await this.$services.do_request('get', CUSTOMER_TABLE_URL, params)
       this.loading = false
       if (response.status === 200) {

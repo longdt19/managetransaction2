@@ -1,4 +1,5 @@
 /* eslint-disable */
+const dayjs = require('dayjs')
 
 const INIT_STATE = {
   token: null,
@@ -43,6 +44,11 @@ export default {
       state.user_info = value
     },
     search: (state, value) => {
+      let to_date = value.to_date
+      if (to_date) {
+        to_date = new Date(dayjs(to_date).endOf('day')).getTime()
+      }
+      value.to_date = to_date
       state.search = value
     },
     pagination: (state, value) => {
@@ -61,7 +67,11 @@ export default {
           params = params + `time>=${value.date.from_date};`
         }
         if (value.date.to_date) {
-          params = params + `time<=${value.date.to_date};`
+          let to_date = value.date.to_date
+          let end_of_day = dayjs(to_date).endOf('day')
+          end_of_day = new Date(end_of_day).getTime()
+
+          params = params + `time<=${end_of_day};`
         }
 
         // load with constant
@@ -79,6 +89,10 @@ export default {
         }
 
         params = params.replace(/;$/, '')
+      }
+
+      if (state.rsql !== params) {
+        state.pagination.current_page = 0
       }
       state.rsql = params
     },

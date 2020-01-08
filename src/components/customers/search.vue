@@ -8,7 +8,7 @@
         placeholder="Từ ngày"
         value-format="timestamp"
         format="dd-MM-yyyy"
-        v-model="from_date"
+        v-model="date.from_date"
       >
       </el-date-picker>
     </div></el-col>
@@ -20,7 +20,7 @@
         placeholder="Đến ngày"
         value-format="timestamp"
         format="dd-MM-yyyy"
-        v-model="to_date"
+        v-model="date.to_date"
       >
       </el-date-picker>
     </div></el-col>
@@ -159,11 +159,13 @@ export default {
   methods: {
     search () {
       const payload = {
-        ...{'date': this.date},
         ...{'constant': this.constant},
-        ...{'form': this.form}
+        ...{'form': this.form},
+        ...{'date': {from_date: null, to_date: null}}
       }
       this.$store.commit('Common/rsql', payload)
+      console.log('search123', this.date)
+      this.$store.commit('Common/search', this.date)
       this.$emit('done_request')
     },
     async get_province_list () {
@@ -234,8 +236,9 @@ export default {
   created () {
     this.$store.commit('Common/rsql', null)
     let day = getDays()
-    this.from_date = day.from_date
-    this.to_date = day.to_date
+    this.date.from_date = day.from_date
+    this.date.to_date = day.to_date
+    this.$store.commit('Common/search', {from_date: day.from_date, to_date: day.to_date})
   }
 }
 </script>

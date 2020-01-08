@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Nội dung" width="150" header-align="center">
+      <el-table-column label="Nội dung" width="200" header-align="center">
         <template slot-scope="scope">
           {{ scope.row.content}}
         </template>

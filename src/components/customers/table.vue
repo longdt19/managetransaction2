@@ -17,13 +17,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="Số điện thoại" header-align="center">
+        <el-table-column label="Số điện thoại" header-align="center" width="120">
           <template slot-scope="scope">
             {{ scope.row.phone}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Người quản lý" header-align="center">
+        <el-table-column label="Người quản lý" header-align="center" width="120">
           <template slot-scope="scope">
             {{ scope.row.manager}}
           </template>

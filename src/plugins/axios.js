@@ -41,6 +41,8 @@ class Services {
     if (!response) response = {status: 500}
     if (this.context) {
       const status = response.status
+      // alert('123')
+      console.log('this', response)
       // network error
       if (!status || status >= 500) {
         // TODO: handle network error and server error
@@ -51,6 +53,10 @@ class Services {
         // TODO: handle authorization issue
         // this.context.$store.commit('User/signed_out')
         window.location.href = process.env.FRONTEND_URL + '/login'
+      }
+      else if (status === 400) {
+        alert(response.data.message)
+        return
       }
     }
     return response
