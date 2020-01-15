@@ -91,7 +91,7 @@
 
       <el-table-column label="Lịch sử" width="110" header-align="center">
         <template slot-scope="scope">
-          {{ Number(scope.row.changeBalance).toLocaleString() }}
+          {{ Number(scope.row.afterBalance).toLocaleString() }}
         </template>
       </el-table-column>
 
