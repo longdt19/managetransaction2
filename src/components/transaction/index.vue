@@ -80,15 +80,15 @@ export default {
       this.loading = true
 
       let params = {
+        'sort': this.sorted_by,
         'page': this.common_data.pagination.current_page,
-        'size': this.common_data.pagination.size,
-        'sort': this.sorted_by
+        'size': this.common_data.pagination.size
       }
       if (this.common_data.rsql) {
         params['filter'] = this.common_data.rsql
       }
 
-      const response = await this.$services.do_request('get', TRANSACTION_URL, params)
+      const response = await this.$services.do_request('get', TRANSACTION_URL + '?sort=time,desc', params)
       this.loading = false
 
       if (response.status === 200) {
