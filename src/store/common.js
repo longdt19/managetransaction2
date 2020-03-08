@@ -88,6 +88,14 @@ export default {
           }
         }
 
+        // load filter
+        // orderid=isnull=1
+        for (const i in value.filter) {
+          if (value.filter[i].value) {
+            params = params + `${value.filter[i].key}${value.filter[i].value};`
+          }
+        }
+
         params = params.replace(/;$/, '')
       }
 

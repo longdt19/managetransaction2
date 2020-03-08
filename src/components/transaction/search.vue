@@ -65,6 +65,18 @@
     </div></el-col>
 
     <el-col :span="2"><div class="grid-content bg-purple">
+      <span>Order</span>
+      <el-select v-model="filter_orders" clearable>
+        <el-option
+          v-for="item in order_filters"
+          :key="item.tooltip"
+          :label="item.tooltip"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div></el-col>
+
+    <el-col :span="2"><div class="grid-content bg-purple">
       <span>Tìm kiếm</span>
       <br/>
       <el-button icon="el-icon-search" @click="search()"></el-button>
@@ -95,15 +107,25 @@ export default {
         status: {key: 'status', value: null}
       },
       show_date_error: false,
-      accept_types: ACCEPT_TYPE_LIST
+      accept_types: ACCEPT_TYPE_LIST,
+      order_filters: [
+        {value: '=notnull=1', type: '', tooltip: 'Đã gán order', display: 'Đã gán order'},
+        {value: '=isnull=1', type: 'success', tooltip: 'Chưa gán order', display: 'Chưa gán order'}
+      ],
+      filter_orders: null
     }
   },
   methods: {
     search () {
+      const filter = [{key: 'order.id', value: this.filter_orders}]
+      // if (this.filter_orders) {
+      //   filter['filter'] = [{key: 'order.id', value: this.filter_orders}]
+      // }
       const payload = {
         ...{'date': this.date},
         ...{'constant': this.constant},
-        ...{'form': this.form}
+        ...{'form': this.form},
+        ...{'filter': filter}
       }
       this.$store.commit('Common/rsql', payload)
       this.$emit('done_request')
@@ -111,7 +133,8 @@ export default {
   },
   watch: {
     ...['date.from_date', 'date.to_date', 'form.traders.value', 'form.azAccount.value',
-      'form.content.value', 'form.code.value', 'form.bankName.value', 'constant.status.value'
+      'form.content.value', 'form.code.value', 'form.bankName.value', 'constant.status.value',
+      'filter_orders'
     ].reduce((watchers, key) => ({
       ...watchers,
       [key] (newVal, oldVal) {
