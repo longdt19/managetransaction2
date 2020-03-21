@@ -83,6 +83,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="Nhập + Tổng" width="120" header-align="center">
+        <template slot-scope="scope">
+          {{ Number(scope.row.cost + scope.row.total).toLocaleString()}}
+        </template>
+      </el-table-column>
+
       <el-table-column label="Hình thức" width="120" header-align="center">
         <template slot-scope="scope" v-if="scope.row.transactions.length">
           <p v-if="scope.row.transactions.length === 1">{{ scope.row.transactions[0]['bankName'] }}</p>

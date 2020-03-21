@@ -1,6 +1,7 @@
 <template>
   <section>
-    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
+    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
+      :show-summary="true" :summary-method="getSummaries">
       <el-table-column type="index" label="STT" width="50" header-align="center">
       </el-table-column>
 
@@ -36,7 +37,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Nợ trước" width="100" header-align="center">
+      <el-table-column label="Nợ trước" prop="debtBefore" width="100" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.debtBefore).toLocaleString() }}
         </template>
@@ -46,25 +47,25 @@
       **********************   Tồn đầu kỳ    **********************************
       ********************************************************************** -->
       <el-table-column label="Tồn đầu kỳ" header-align="center">
-        <el-table-column label="Nhập" width="80" header-align="center">
+        <el-table-column label="Nhập" width="80" prop="previousPeriodImport" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.previousPeriodImport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Xuất" width="80" header-align="center">
+        <el-table-column label="Xuất" width="80" prop="previousPeriodExport" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.previousPeriodExport).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Thanh toán" width="80" header-align="center">
+        <el-table-column label="Thanh toán" width="80" prop="previousPeriodPaid" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.previousPeriodPaid).toLocaleString() }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Tổng" width="80" header-align="center">
+        <el-table-column label="Tổng" width="80" prop="previousPeriodTotal" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.previousPeriodTotal).toLocaleString()}}
           </template>
@@ -75,25 +76,25 @@
       **********************   Tồn trong kỳ    ********************************
       ********************************************************************** -->
       <el-table-column label="Tồn trong kỳ" header-align="center">
-        <el-table-column label="Nhập" width="80" header-align="center">
+        <el-table-column label="Nhập" width="80" prop="currentPeriodImport" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.currentPeriodImport).toLocaleString()}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Xuất" width="80" header-align="center">
+        <el-table-column label="Xuất" width="80" prop="currentPeriodExport" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.currentPeriodExport).toLocaleString()}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Thanh toán" width="80" header-align="center">
+        <el-table-column label="Thanh toán" width="80" prop="currentPeriodPaid" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.currentPeriodPaid).toLocaleString()}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Tổng" width="80" header-align="center">
+        <el-table-column label="Tổng" width="80" prop="currentPeriodTotal" header-align="center">
           <template slot-scope="scope">
             {{ Number(scope.row.currentPeriodTotal).toLocaleString()}}
           </template>
@@ -103,7 +104,7 @@
       <!-- ********************************************************************
       *************************************************************************
       ********************************************************************** -->
-      <el-table-column label="Tổng" width="100" header-align="center">
+      <el-table-column label="Tổng" width="100" prop="total" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.total).toLocaleString() }}
         </template>
@@ -196,6 +197,34 @@ export default {
     }
   },
   methods: {
+    getSummaries (params) {
+      const { columns, data } = params
+      const sums = []
+
+      if (columns.length > 0 && data.length > 0) {
+        columns.forEach((column, index) => {
+          if (column.property) {
+            const values = data.map(item => Number(item[column.property]))
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0).toLocaleString()
+            } else {
+              sums[index] = ''
+            }
+          } else {
+            sums[index] = ''
+          }
+        })
+      }
+      sums[0] = 'Tổng'
+      return sums
+    },
     async load_customer_groups_list () {
       const params = {
         'page': 0,

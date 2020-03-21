@@ -1,6 +1,7 @@
 <template>
   <section>
-    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
+    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
+      :show-summary="true" :summary-method="getSummaries">
       <el-table-column type="index" label="STT" width="50" header-align="center">
       </el-table-column>
 
@@ -83,7 +84,7 @@
       <!-- ********************************************************************
       *************************************************************************
       ********************************************************************** -->
-      <el-table-column label="Số dư cuối" width="100" header-align="center">
+      <el-table-column label="Số dư cuối" width="100" prop="finalBalances" header-align="center">
         <template slot-scope="scope">
             {{ Number(scope.row.finalBalances).toLocaleString() }}
         </template>
@@ -148,6 +149,34 @@ export default {
     }
   },
   methods: {
+    getSummaries (params) {
+      const { columns, data } = params
+      const sums = []
+
+      if (columns.length > 0 && data.length > 0) {
+        columns.forEach((column, index) => {
+          if (column.property) {
+            const values = data.map(item => Number(item[column.property]))
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0).toLocaleString()
+            } else {
+              sums[index] = ''
+            }
+          } else {
+            sums[index] = ''
+          }
+        })
+      }
+      sums[0] = 'Tổng'
+      return sums
+    },
     done_request () {
       this.$emit('done_request')
     }
