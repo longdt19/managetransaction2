@@ -55,6 +55,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="Mã đơn hàng" width="120" header-align="center">
+        <template slot-scope="scope">
+          {{ scope.row.orderCode ? scope.row.orderCode : 'Chưa gán'}}
+        </template>
+      </el-table-column>
+
       <el-table-column label="Ngân hàng" width="150" header-align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="`Số dư trước: ${Number(scope.row.beforeBalance).toLocaleString()} - Số dư sau: ${Number(scope.row.afterBalance).toLocaleString()}`" placement="top-start">
