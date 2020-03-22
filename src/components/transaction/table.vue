@@ -18,6 +18,7 @@
     <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
       ref="multipleTable"
       @selection-change="handleSelectionChange"
+      :show-summary="true" :summary-method="getSummaries"
     >
       <el-table-column type="selection" width="50" v-if="acception.selected === true">
       </el-table-column>
@@ -77,13 +78,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Có" width="110" header-align="center">
+      <el-table-column label="Có" width="110" prop="NHAN_TIEN" header-align="center">
         <template slot-scope="scope">
           {{ scope.row.type === 'NHAN_TIEN' ? Number(scope.row.money).toLocaleString() : '' }}
         </template>
       </el-table-column>
 
-      <el-table-column label="Nợ" width="110" header-align="center">
+      <el-table-column label="Nợ" width="110" prop="CHUYEN_TIEN" header-align="center">
         <template slot-scope="scope">
           {{ scope.row.type === 'CHUYEN_TIEN' ? Number(scope.row.money).toLocaleString() : '' }}
         </template>
@@ -156,6 +157,7 @@ import date_from_timestamp from '@/utils/date_from_timestamp'
 import {TRANSACTION_URL, ACCEPTION_URL} from '@/constants/endpoints'
 import DeleteComponent from '@/components/common/delete'
 import UpdateComponent from './create_or_update'
+// import getSummaries from '@/utils/getSummaries'
 
 export default {
   components: {UpdateComponent, DeleteComponent},
@@ -177,6 +179,40 @@ export default {
     }
   },
   methods: {
+    getSummaries (params) {
+      const { columns, data } = params
+      const sums = []
+
+      if (columns.length > 0 && data.length > 0) {
+        columns.forEach((column, index) => {
+          if (column.property) {
+            const values = data.map(item => {
+              if (column.property === item.type) {
+                return Number(item.money)
+              } else {
+                return 0
+              }
+            })
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0).toLocaleString()
+            } else {
+              sums[index] = ''
+            }
+          } else {
+            sums[index] = ''
+          }
+        })
+      }
+      sums[0] = 'Tổng'
+      return sums
+    },
     async accept_transaction () {
       if (this.acception.loading) return
       this.acception.loading = true

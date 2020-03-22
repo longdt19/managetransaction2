@@ -1,6 +1,7 @@
 <template>
   <section>
-    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border>
+    <el-table :data="dataTable" v-loading="loading" style="width: 100%" border
+      :show-summary="true" :summary-method="getSummaries">
       <el-table-column type="index" label="STT" width="50"  header-align="center">
       </el-table-column>
 
@@ -36,7 +37,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Nhập" width="120" header-align="center">
+      <el-table-column label="Nhập" width="120" prop="cost" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.cost).toLocaleString()}}
         </template>
@@ -71,7 +72,7 @@
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="Tổng" width="120" header-align="center">
+      <el-table-column label="Tổng" width="120" prop="total" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.total).toLocaleString()}}
         </template>
@@ -80,12 +81,6 @@
       <el-table-column label="Công nợ" width="120" header-align="center">
         <template slot-scope="scope">
           {{ Number(scope.row.afterDebt).toLocaleString()}}
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Nhập + Tổng" width="120" header-align="center">
-        <template slot-scope="scope">
-          {{ Number(scope.row.cost + scope.row.total).toLocaleString()}}
         </template>
       </el-table-column>
 
@@ -146,6 +141,7 @@ import {ORDER_TYPE_LIST} from '@/constants'
 import DeleteComponent from '@/components/common/delete'
 import {ORDERS_URL} from '@/constants/endpoints'
 import UpdateComponent from './create_or_update'
+import getSummaries from '@/utils/getSummaries'
 
 export default {
   components: {UpdateComponent, DeleteComponent},
@@ -160,6 +156,7 @@ export default {
     }
   },
   methods: {
+    getSummaries,
     date_from_timestamp,
     done_request () {
       this.$emit('done_request')
