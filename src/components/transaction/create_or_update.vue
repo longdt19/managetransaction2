@@ -94,15 +94,17 @@
           <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
             filterable
             remote
-            :remote-method="get_order_list"
             :loading="order.loading"
           >
             <el-option
-              v-for="b in order.list"
-              :key="b.id"
-              :label="b.code"
-              :value="b.id"
-            ></el-option>
+              v-for="o in order.list"
+              :key="o.id"
+              :label="o.code"
+              :value="o.id"
+            >
+              <span style="float: left">{{ o.code }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ date_from_timestamp(o.createdAt) }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
 
@@ -128,6 +130,7 @@ import {
 import {TRANSACTION_TYPE_LIST} from '@/constants'
 import {TRANSACTION_RULES} from '@/constants/rules_input'
 import getDays from '@/utils/day'
+import date_from_timestamp from '@/utils/date_from_timestamp'
 
 export default {
   props: {
@@ -178,11 +181,14 @@ export default {
       rules: TRANSACTION_RULES
     }
   },
+  watch: {
+    'form.customerId' (value) {
+      this.get_order_list()
+    }
+  },
   methods: {
+    date_from_timestamp,
     getDays,
-    filter_method (query) {
-      console.log('qeury', query)
-    },
     open () {
       this.form.time = this.getDays().to_date
       if (this.scope) {
@@ -273,21 +279,18 @@ export default {
         this.bank_accounts.list = response.data
       }
     },
-    async get_order_list (query) {
-      if (query === '') return []
+    async get_order_list () {
       if (this.order.loading) return
       this.order.loading = true
 
       let params = {
-        'customerId': this.form.customerId,
-        'filter': `code=='*${query}*'`
+        'filter': `customer.id=='${this.form.customerId}'`,
+        'sort': this.sorted_by
       }
 
       const response = await this.$services.do_request('get', ORDERS_URL, params)
-
       if (response.status === 200) {
         this.order.loading = false
-
         this.order.list = response.data.content
       }
     }
