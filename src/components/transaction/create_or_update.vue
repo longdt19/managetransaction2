@@ -94,6 +94,7 @@
           <el-select v-model="form.orderId" placeholder="Vui lòng chọn"
             filterable
             remote
+            :remote-method="get_order_list_search"
             :loading="order.loading"
           >
             <el-option
@@ -183,7 +184,7 @@ export default {
   },
   watch: {
     'form.customerId' (value) {
-      this.get_order_list()
+      this.get_order_list_complete()
     }
   },
   methods: {
@@ -279,13 +280,30 @@ export default {
         this.bank_accounts.list = response.data
       }
     },
-    async get_order_list () {
+    async get_order_list_complete () {
       if (this.order.loading) return
       this.order.loading = true
 
       let params = {
         'filter': `customer.id=='${this.form.customerId}'`,
-        'sort': this.sorted_by
+        'sort': this.sorted_by,
+        'size': 1000,
+        'page': 0
+      }
+
+      const response = await this.$services.do_request('get', ORDERS_URL, params)
+      if (response.status === 200) {
+        this.order.loading = false
+        this.order.list = response.data.content
+      }
+    },
+    async get_order_list_search (query) {
+      if (this.order.loading) return
+      this.order.loading = true
+
+      let params = {
+        'customerId': this.form.customerId,
+        'filter': `code=='*${query}*'`
       }
 
       const response = await this.$services.do_request('get', ORDERS_URL, params)
