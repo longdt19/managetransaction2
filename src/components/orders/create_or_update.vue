@@ -78,7 +78,7 @@
           </el-form-item>
 
           <el-form-item label="Chiết khấu (%)" :label-width="formLabelWidth">
-            <vue-numeric separator="," v-model="form.extracts" :value="form.extracts" class="vue-numeric-input"></vue-numeric>
+            <vue-numeric v-bind:precision="2" separator="," v-model="form.extracts" :value="form.extracts" class="vue-numeric-input"></vue-numeric>
           </el-form-item>
 
           <el-form-item label="Giảm giá" :label-width="formLabelWidth">
