@@ -50,7 +50,7 @@
       <el-form :model="form" :rules="rules" ref="form2">
 
         <el-form-item label="Người giao dịch" :label-width="formLabelWidth" prop="traders">
-          <el-input v-model="form.traders"></el-input>
+          <el-input v-model="form.traders" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="Ghi chú" :label-width="formLabelWidth">
@@ -104,7 +104,7 @@
               :value="o.id"
             >
               <span style="float: left">{{ o.code }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ date_from_timestamp(o.createdAt) }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ date_from_timestamp(o.time) }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -314,6 +314,7 @@ export default {
     }
   },
   created () {
+    this.form.traders = this.common_data.user_info.userName
   }
 }
 </script>
