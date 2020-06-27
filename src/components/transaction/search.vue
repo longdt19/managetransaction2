@@ -112,7 +112,18 @@ export default {
         {value: '=notnull=1', type: '', tooltip: 'Đã gán order', display: 'Đã gán order'},
         {value: '=isnull=1', type: 'success', tooltip: 'Chưa gán order', display: 'Chưa gán order'}
       ],
-      filter_orders: null
+      filter_orders: null,
+      statistic_search: {
+        traders: null,
+        customerAccount: null,
+        bankName: null,
+        transactionCode: null,
+        content: null,
+        status: null,
+        isAssignOrder: null,
+        fromTime: null,
+        toTime: null
+      }
     }
   },
   methods: {
@@ -127,7 +138,20 @@ export default {
         ...{'form': this.form},
         ...{'filter': filter}
       }
+
+      const statistic_payload = {
+        traders: this.form.traders.value,
+        customerAccount: this.form.azAccount.value,
+        bankName: this.form.bankName.value,
+        transactionCode: this.form.code.value,
+        content: this.form.content.value,
+        status: this.constant.status.value,
+        isAssignOrder: this.filter_orders,
+        fromTime: this.date.from_date,
+        toTime: this.date.to_date
+      }
       this.$store.commit('Common/rsql', payload)
+      this.$store.commit('Common/transaction_statistic', statistic_payload)
       this.$emit('done_request')
     }
   },

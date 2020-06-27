@@ -32,6 +32,11 @@
           <vue-numeric separator="," v-model="form.bankFee" value="0" class="vue-numeric-input"></vue-numeric>
         </el-form-item>
 
+        <el-form-item label="Phí nhận" :label-width="formLabelWidth">
+          <!-- <el-input v-model="form.bankFee"></el-input> -->
+          <vue-numeric separator="," v-model="form.bonus" value="0" class="vue-numeric-input"></vue-numeric>
+        </el-form-item>
+
         <el-form-item label="Nội dung" :label-width="formLabelWidth">
           <el-input v-model="form.content"></el-input>
         </el-form-item>
@@ -116,7 +121,8 @@ export default {
         content: null,
         fromBankAccountId: null,
         toBankAccountId: null,
-        traders: null
+        traders: null,
+        bonus: null
       },
       formLabelWidth: '120px',
       loading: false,

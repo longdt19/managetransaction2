@@ -88,7 +88,15 @@ export default {
       constant: {
         type: {key: 'type', value: null}
       },
-      order_type_list: ORDER_TYPE_LIST
+      order_type_list: ORDER_TYPE_LIST,
+      statistic_payload: {
+        fromTime: null,
+        toTime: null,
+        orderCode: null,
+        customerAccount: null,
+        orderType: null,
+        productName: null
+      }
     }
   },
   methods: {
@@ -98,7 +106,17 @@ export default {
         ...{'constant': this.constant},
         ...{'form': this.form}
       }
+
+      const payload_statistic = {
+        fromTime: this.date.from_date,
+        toTime: this.date.to_date,
+        orderCode: this.form.code.value,
+        customerAccount: this.form.azAccount.value,
+        orderType: this.constant.type.value,
+        productName: this.form.productName.value
+      }
       this.$store.commit('Common/rsql', payload)
+      this.$store.commit('Common/order_statistic', payload_statistic)
       this.$emit('done_request')
     }
   },

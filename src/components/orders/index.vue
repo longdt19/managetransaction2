@@ -8,6 +8,25 @@
     />
   </div>
 
+  <el-row :gutter="10">
+    <el-col :span="6">
+      <h3 style="margin-right: 20px">Tổng:</h3>
+      <el-tag>{{ Number(total).toLocaleString() }}</el-tag>
+    </el-col>
+    <el-col :span="6">
+      <h3 style="margin-right: 20px">Nhập:</h3>
+      <el-tag type="success">{{ Number(totalCost).toLocaleString() }}</el-tag>
+    </el-col>
+    <el-col :span="6">
+      <h3 style="margin-right: 20px">Có:</h3>
+      <el-tag type="warning">{{ Number(totalPaidExport).toLocaleString() }}</el-tag>
+    </el-col>
+    <el-col :span="6">
+      <h3 style="margin-right: 20px">Nợ:</h3>
+      <el-tag type="danger">{{ Number(totalPaidImport).toLocaleString() }}</el-tag>
+    </el-col>
+  </el-row>
+
   <search-component @done_request="done_request"/>
 
   <div style="margin-top: 30px">
@@ -24,7 +43,7 @@
 import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
-import {ORDERS_URL} from '@/constants/endpoints'
+import {ORDERS_URL, ORDER_STATISTIC} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 import CreateComponent from './create_or_update'
@@ -46,10 +65,24 @@ export default {
         size: 100
       },
       sorted_by: 'createdAt,desc',
-      navigation: []
+      navigation: [],
+      totalPaidExport: null,
+      totalPaidImport: null,
+      totalCost: null,
+      total: null
     }
   },
   methods: {
+    async get_statistic () {
+      const params = this.common_data.order_statistic
+      const response = await this.$services.do_request('get', ORDER_STATISTIC + '?sort=time,desc', params)
+      if (response.status === 200) {
+        this.totalPaidExport = response.data.totalPaidExport
+        this.totalPaidImport = response.data.totalPaidImport
+        this.totalCost = response.data.totalCost
+        this.total = response.data.total
+      }
+    },
     async load_list () {
       if (this.loading) return
       this.loading = true
@@ -79,6 +112,7 @@ export default {
     },
     done_request () {
       this.load_list()
+      this.get_statistic()
     }
   },
   watch: {
@@ -103,6 +137,7 @@ export default {
     }
     this.$store.commit('Common/pagination', pagination)
     this.load_list()
+    this.get_statistic()
   }
 }
 </script>

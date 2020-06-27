@@ -17,6 +17,11 @@
     </div>
 
   </div>
+
+  <div style="justify-content: center; display: flex;">
+    <h3 style="margin-right: 20px">Tổng gửi: <el-tag>{{ Number(totalSend).toLocaleString() }}</el-tag></h3>
+    <h3>Tổng nhận: <el-tag type="success">{{ Number(totalReceive).toLocaleString() }}</el-tag></h3>
+  </div>
   <search-component @done_request="done_request"/>
 
   <div style="margin-top: 30px">
@@ -35,7 +40,7 @@
 <script>
 import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
-import {TRANSACTION_URL} from '@/constants/endpoints'
+import {TRANSACTION_URL, TRANSACTION_STATISTIC} from '@/constants/endpoints'
 import CreateComponent from './create_or_update'
 import TableComponent from './table'
 import SearchComponent from './search'
@@ -71,10 +76,20 @@ export default {
         size: 100
       },
       sorted_by: 'createdAt,desc',
-      navigation: []
+      navigation: [],
+      totalReceive: 0,
+      totalSend: 0
     }
   },
   methods: {
+    async get_statistic () {
+      const params = this.common_data.transaction_statistic
+      const response = await this.$services.do_request('get', TRANSACTION_STATISTIC, params)
+      if (response.status === 200) {
+        this.totalReceive = response.data.totalReceive
+        this.totalSend = response.data.totalSend
+      }
+    },
     async load_list () {
       if (this.loading) return
       this.loading = true
@@ -104,6 +119,7 @@ export default {
       }
     },
     done_request () {
+      this.get_statistic()
       this.load_list()
     }
   },
@@ -122,6 +138,7 @@ export default {
       return
     }
     this.$store.commit('Common/rsql', null)
+    this.$store.commit('Common/transaction_statistic', null)
     const pagination = {
       size: 10,
       element_total: 0,
@@ -129,6 +146,7 @@ export default {
     }
     this.$store.commit('Common/pagination', pagination)
     this.load_list()
+    this.get_statistic()
   }
 }
 </script>

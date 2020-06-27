@@ -28,7 +28,26 @@ const INIT_STATE = {
     user: {},
     role: {}
   },
-  role: {}
+  role: {},
+  transaction_statistic: {
+    traders: null,
+    customerAccount: null,
+    bankName: null,
+    transactionCode: null,
+    content: null,
+    status: null,
+    isAssignOrder: null,
+    fromTime: null,
+    toTime: null
+  },
+  order_statistic: {
+    fromTime: null,
+    toTime: null,
+    orderCode: null,
+    customerAccount: null,
+    orderType: null,
+    productName: null
+  }
 }
 
 export default {
@@ -59,6 +78,12 @@ export default {
     },
     pagination_current_page: (state, value) => {
       state.pagination.current_page = value
+    },
+    transaction_statistic: (state, value) => {
+      state.transaction_statistic = value
+    },
+    order_statistic: (state, value) => {
+      state.order_statistic = value
     },
     rsql: (state, value) => {
       let params = ''
@@ -144,6 +169,8 @@ export default {
     pagination_current_page: state => state.pagination,
     rsql: state => state.rsql,
     navigation: state => state.navigation,
-    role: state => state.role
+    role: state => state.role,
+    transaction_statistic: state => state.transaction_statistic,
+    order_statistic: state => state.order_statistic
   }
 }

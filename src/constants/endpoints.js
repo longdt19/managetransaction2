@@ -53,3 +53,7 @@ export const RESET_PASSWORD_URL = BASE + '/user/reset-password'
 
 // Internal Transactions
 export const INTERNAL_TRANSACTION_URL = BASE + '/internal-transaction'
+
+// Statistic
+export const TRANSACTION_STATISTIC = 'http://pmqlazpro.com:8080/transaction-api/statistic/transaction'
+export const ORDER_STATISTIC = 'http://pmqlazpro.com:8080/transaction-api/statistic/order'
