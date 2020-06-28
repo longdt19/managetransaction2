@@ -146,7 +146,7 @@ export default {
         transactionCode: this.form.code.value,
         content: this.form.content.value,
         status: this.constant.status.value,
-        isAssignOrder: this.filter_orders,
+        isAssignOrder: this.filter_orders === '=notnull=1',
         fromTime: this.date.from_date,
         toTime: this.date.to_date
       }
