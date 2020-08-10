@@ -12,7 +12,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Có quyền xem" header-align="center" align="center">
+      <el-table-column label="Xem tất cả" header-align="center" align="center">
         <template slot-scope="scope">
           <el-switch
             v-if="scope.row.role.GET_LIST"
@@ -22,7 +22,17 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Có quyền thêm" header-align="center" align="center">
+      <el-table-column label="Xem theo admin" header-align="center" align="center">
+        <template slot-scope="scope">
+          <el-switch
+            v-if="scope.row.role.GET_BY_USER"
+            v-model="scope.row.role.GET_BY_USER.value"
+            :active-value="scope.row.role.GET_BY_USER.active_value">
+          </el-switch>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Thêm" header-align="center" align="center">
         <template slot-scope="scope">
           <el-switch
             v-if="scope.row.role.CREATE"
@@ -32,7 +42,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Có quyền sửa" header-align="center" align="center">
+      <el-table-column label="Sửa" header-align="center" align="center">
         <template slot-scope="scope">
           <el-switch
             v-if="scope.row.role.UPDATE"
@@ -42,7 +52,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Có quyền xóa" header-align="center" align="center">
+      <el-table-column label="Xóa" header-align="center" align="center">
         <template slot-scope="scope">
           <el-switch
             v-if="scope.row.role.DELETE"
