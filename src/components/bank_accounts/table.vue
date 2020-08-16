@@ -98,7 +98,7 @@
                 v-if="navigation.includes('UPDATE')"
                 dialog-title="Cập nhật tài khoản ngân hàng"
                 :api-url="apiUrl"
-                :items-create="bank_items"
+                :items-create="bankItems"
                 method-request="put"
                 @done_request="done_request"
                 button-size="mini"
@@ -134,7 +134,8 @@ export default {
   components: {UpdateComponent, DeleteComponent},
   props: {
     dataTable: {type: Array},
-    loading: {type: Boolean, default: false}
+    loading: {type: Boolean, default: false},
+    bankItems: {type: Array}
   },
   data () {
     return {

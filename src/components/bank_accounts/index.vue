@@ -21,7 +21,9 @@
 
   <div style="margin-top: 30px">
     <select-perpage-component />
-    <table-component :data-table="data_table" :loading="loading" @done_request="done_request"/>
+    <table-component
+      :data-table="data_table" :loading="loading" @done_request="done_request"
+      :bankItems="bank_items"/>
     <div class="" style="text-align: right; margin-top: 30px">
       <pagination-component />
     </div>
@@ -34,7 +36,7 @@ import SelectPerpageComponent from '@/components/common/select_perpage'
 import PaginationComponent from '@/components/common/pagination'
 
 import CreateComponent from '@/components/common/create_or_update'
-import {BANK_ACCOUNTS_URL, BANK_ACCOUNTS_TABLE_URL} from '@/constants/endpoints'
+import {BANK_ACCOUNTS_URL, BANK_ACCOUNTS_TABLE_URL, USERS_TABLE_URL} from '@/constants/endpoints'
 import SearchComponent from './search'
 import TableComponent from './table'
 /* eslint-disable */
@@ -63,6 +65,25 @@ export default {
     }
   },
   methods: {
+    async load_users () {
+      const params = {
+        'page': 0,
+        'size': 1000,
+        'sort': this.sorted_by
+      }
+      const response = await this.$services.do_request('get', USERS_TABLE_URL, params)
+      if (response.status === 200) {
+        let bank_data = {label: 'Admin', value: '', key: 'admin', type: 'selection', selections: []}
+        response.data.content.forEach(item => {
+          bank_data.selections.push({
+            id: item.userName,
+            name: item.userName,
+            type: item.userName
+          })
+        })
+        this.bank_items.push(bank_data)
+      }
+    },
     async load_list () {
       if (this.loading) return
       this.loading = true
@@ -76,7 +97,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_ACCOUNTS_TABLE_URL, params)
-
       if (response.status === 200) {
         this.loading = false
 
@@ -114,6 +134,7 @@ export default {
     }
     this.$store.commit('Common/pagination', pagination)
     this.load_list()
+    this.load_users()
   }
 }
 </script>
