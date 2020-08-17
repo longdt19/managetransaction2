@@ -196,6 +196,7 @@ export default {
     }
   },
   created () {
+    this.form.traders = this.common_data.user_info.userName
   }
 }
 </script>
